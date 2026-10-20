@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 const TopNav = () => {
   return (
-    <div className="d-none d-lg-block top-nav-bar bg-dark-blue text-white py-2 border-bottom border-secondary border-opacity-25">
+    <div className="d-none d-lg-block top-nav-bar bg-myPrimary text-white py-2 border-bottom border-secondary border-opacity-25">
       <div className="row align-items-center gy-2 px-5">
         {/* Left Column: Email & Phone */}
         <div className="col-12 col-md-4 col-lg-4 d-flex align-items-center justify-content-center justify-content-md-start gap-4">
