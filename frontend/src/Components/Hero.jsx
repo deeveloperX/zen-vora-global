@@ -1,5 +1,3 @@
-import React from 'react';
-// Make sure 'hero.png' (Image 2) is located inside your 'src/assets/' directory
 import heroBg from '../assets/hero.png';
 
 const Hero = () => {
@@ -62,5 +60,4 @@ const Hero = () => {
     </section>
   );
 };
-
 export default Hero;
