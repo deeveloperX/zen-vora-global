@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FeaturesBar = () => {
   const features = [
     {
@@ -74,7 +72,7 @@ const FeaturesBar = () => {
               className="col-12 col-md-6 col-lg d-flex flex-column align-items-center justify-content-center p-2"
               style={{ minWidth: '180px' }} // Added min-width to ensure they can't shrink too small and wrap
             >
-              <div className="mb-2 p-1 rounded-circle bg-light d-inline-flex align-items-center justify-content-center shadow-sm" style={{ width: '48px', height: '48px' , border:'1.5px solid #e2e8f0' }}>
+              <div className="mb-2 p-1 rounded-circle bg-white d-inline-flex align-items-center justify-content-center shadow-sm" style={{ width: '48px', height: '48px' , border: '1.5px solid #e2e8f0' }}>
                 {item.icon}
               </div>
               <h6 className="fw-bold text-dark mb-1" style={{ fontSize: '0.9rem' }}>{item.title}</h6>
