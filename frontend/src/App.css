@@ -1,20 +1,27 @@
 :root {
   --primary-color: #051f47; /*dark-blue*/
-  --secondary-color: rgb(247, 131, 22); /*orangish*/
+  --secondary-color: rgb(241, 122, 11); /*orangish*/
 }
 
-.bg-dark-blue {
+.bg-myPrimary {
   background-color: var(--primary-color); /* Custom deep dark blue */
 }
+.bg-mySecondary{
+  background-color: var(--secondary-color);
+}
 
-.text-dark-blue {
+.text-myPrimary  {
   color: var(--primary-color);
+}
+
+.text-mySecondary {
+  color: var(--secondary-color) !important;
 }
 
 
 /* navbar start */
 .navbar-nav .nav-link.active {
-  color: white !important; /* Your custom active color */
+  color: white !important; /* custom active color */
   font-weight: bold;
   background-color: var(--secondary-color);
   border-radius: 25px;
@@ -54,3 +61,37 @@
   }
 }
 /* navbar end */
+
+/* CtaBanner Start */
+
+
+.btn-cta-banner {
+  background-color: var(--secondary-color) !important;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-cta-banner:hover {
+  background-color: #e04816 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255, 87, 34, 0.4) !important;
+}
+
+/* Vertical divider border for desktop screens */
+@media (min-width: 992px) {
+  .border-start-lg {
+    border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+}
+
+/* Semi-transparent text overrides */
+.text-white-90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive adjustments for image on mobile */
+.globe-image-wrapper img {
+  max-width: 100%;
+  height: auto;
+}
+/* CtaBanner end */
