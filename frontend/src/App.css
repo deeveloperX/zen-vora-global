@@ -18,6 +18,9 @@
   color: var(--secondary-color) !important;
 }
 
+.filter-white{
+  filter: brightness(0) invert(1);
+}
 
 /* navbar start */
 .navbar-nav .nav-link.active {
