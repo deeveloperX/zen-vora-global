@@ -1,4 +1,3 @@
-import React from 'react';
 import AboutSection from '../Components/AboutSection';
 import SupportedMarkets from '../Components/SupportedMarkets';
 import Mission from '../Components/Mission';
