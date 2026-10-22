@@ -8,6 +8,8 @@ import Navbar from './Components/Navbar'
 import Contact from './Pages/Contact'
 import Blogs from './Pages/Blogs'
 import BlogDetails from './Pages/BlogDetails'
+import PrivacyPolicy from './Pages/PrivacyPolicy'
+import TermsConditions from './Pages/TermsConditions'
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
           <Route path='/support' element={<Contact   />} />
           <Route path='/blogs' element={<Blogs />} />
           <Route path='/blogs/:id' element={<BlogDetails />} />
+          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/terms-conditions' element={<TermsConditions/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>
