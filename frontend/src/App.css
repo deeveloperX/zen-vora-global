@@ -1,3 +1,4 @@
+/* global css start */
 :root {
   --primary-color: #051f47; /*dark-blue*/
   --secondary-color: rgb(241, 122, 11); /*orangish*/
@@ -33,9 +34,18 @@
   color: white;
 }
 
+.text-white-90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bg-light-subtle {
+  background-color: #f8fafc !important;
+}
+
 .filter-white{
   filter: brightness(0) invert(1);
 }
+/* global css end */
 
 /* navbar start */
 .navbar-nav .nav-link.active {
@@ -80,31 +90,29 @@
 }
 /* navbar end */
 
+/* Hero start */
+.hero-section {
+  background-image:
+    linear-gradient(90deg, rgba(210, 226, 245, 0.631) 20%, rgba(248, 247, 247, 0) 50%),
+    url('./assets/hero-large.webp');
+  background-size: cover;
+  background-position: center right;
+}
+
+@media (max-width: 767.98px) {
+  .hero-section {
+    background-image:
+    linear-gradient(90deg, rgba(231, 237, 249, 0.769) 45%, rgba(255, 255, 255, 0.04) 100%),
+      url('./assets/hero-small.webp');
+  }
+}
+/* Hero end */
+
 /* CtaBanner Start */
-
-
-.btn-cta-banner {
-  background-color: var(--secondary-color) !important;
-  border: none;
-  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn-cta-banner:hover {
-  background-color: #e04816 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(255, 87, 34, 0.4) !important;
-}
-
-/* Vertical divider border for desktop screens */
 @media (min-width: 992px) {
   .border-start-lg {
     border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
-}
-
-/* Semi-transparent text overrides */
-.text-white-90 {
-  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Responsive adjustments for image on mobile */
@@ -113,3 +121,29 @@
   height: auto;
 }
 /* CtaBanner end */
+
+
+/* Feature Card Hover Effect */
+.feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transform: scale(1.05);
+}
+
+.feature-card:hover .feature-icon-box {
+  background-color: var(--secondary-color) !important;
+  color: #ffffff !important;
+} 
+
+
+@media (min-width: 992px){
+  .feature-custom-position{
+    position: relative;
+    top: -50px;
+    width: 75%;
+  }  
+}

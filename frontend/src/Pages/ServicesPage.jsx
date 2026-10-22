@@ -9,7 +9,7 @@ const ServicesPage = () => {
     <div className="services-page bg-light">
       <ServicesCtaBanner />
 
-      <section id="services-grid" className="py-5">
+      <section id="services-grid" className="py-4">
         <div className="container py-4">
           <div className="text-center mb-5">
             <h2 className="fw-bold text-dark-blue mb-2">What We Offer</h2>
