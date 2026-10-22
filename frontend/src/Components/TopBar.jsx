@@ -1,4 +1,4 @@
-import { BsEnvelope, BsTelephone } from 'react-icons/bs';
+import { BsEnvelope, BsTelephone, BsHeadphones } from 'react-icons/bs';
 import { Link } from 'react-router';
 
 const TopNav = () => {
@@ -32,17 +32,18 @@ const TopNav = () => {
         {/* Right Column: Quick Links */}
         <div className="col-12 col-md-4 col-lg-4 d-flex align-items-center justify-content-center justify-content-md-end">
           <div className="d-flex align-items-center gap-2 small">
-            <Link to={`/track-order`} className="text-white-50 text-decoration-none nav-hover">
+            {/* <Link to={`/track-order`} className="text-white-50 text-decoration-none nav-hover">
               Track Order
             </Link>
-            <span className="text-white-50">|</span>
+            <span className="text-white-50">|</span> */}
             <Link to={`/support`} className="text-white-50 text-decoration-none nav-hover">
               Support
+              <BsHeadphones className='fs-6 ms-1  '/>
             </Link>
-            <span className="text-white-50">|</span>
+            {/* <span className="text-white-50">|</span>
             <Link to={`/login`} className="text-white-50 text-decoration-none nav-hover">
               Log In / Register
-            </Link>
+            </Link> */}
           </div>
         </div>
 

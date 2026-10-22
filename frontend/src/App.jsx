@@ -8,13 +8,15 @@ import Navbar from './Components/Navbar'
 import Contact from './Pages/Contact'
 import Blogs from './Pages/Blogs'
 import BlogDetails from './Pages/BlogDetails'
+import FaqPage from './Pages/FaqPage'
+import ServicesPage from './Pages/ServicesPage'
 import PrivacyPolicy from './Pages/PrivacyPolicy'
 import TermsConditions from './Pages/TermsConditions'
 
 function App() {
 
   return (
-    <>
+    <div className='overflow-x-hidden'>
       <BrowserRouter>
       <TopBar />
       <Navbar />
@@ -24,12 +26,14 @@ function App() {
           <Route path='/support' element={<Contact   />} />
           <Route path='/blogs' element={<Blogs />} />
           <Route path='/blogs/:id' element={<BlogDetails />} />
+          <Route path='/faqs' element={<FaqPage />} />
+          <Route path='/services' element={<ServicesPage />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/terms-conditions' element={<TermsConditions/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 

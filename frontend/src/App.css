@@ -18,6 +18,21 @@
   color: var(--secondary-color) !important;
 }
 
+.hover-mySecondary:hover{
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color)!important ;
+}
+
+.btn-outline-myPrimary{
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-myPrimary:hover{
+  background-color: var(--primary-color);
+  color: white;
+}
+
 .filter-white{
   filter: brightness(0) invert(1);
 }

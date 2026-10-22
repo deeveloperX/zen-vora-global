@@ -112,7 +112,7 @@ const ContactFormAndMap = () => {
                     <div className="col-12 mt-4">
                       <button 
                         type="submit" 
-                        className="btn bg-mySecondary btn-lg w-100 rounded-3 text-white fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                        className="btn bg-mySecondary hover-mySecondary btn-lg w-100 rounded-3 text-white fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm"
                       >
                         <span>Send Message</span>
                         <BsSend className="fs-6" />

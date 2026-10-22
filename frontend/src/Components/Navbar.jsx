@@ -1,4 +1,4 @@
-import { FiShoppingCart } from "react-icons/fi";
+// import { FiShoppingCart  } from "react-icons/fi";
 import { Link, NavLink } from 'react-router';
 import Logo from '../assets/android-chrome-192x192.png';
 
@@ -6,7 +6,7 @@ const Navbar = () => {
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
-                <div className="container-fluid px-5">
+                <div className="container-fluid px-md-4 px-lg-5">
                     <Link to={`/`} className="navbar-brand d-flex align-items-center gap-1">
                         <img alt="logo" src={Logo} style={{ width: "80px" }} />
                         <div>
@@ -30,14 +30,14 @@ const Navbar = () => {
                                     Our Services
                                 </Link>
                                 <ul className="dropdown-menu nav-custom-dropdown">
-                                    <li><Link to={"#"} className="dropdown-item">Product Sourcing</Link></li>
-                                    <li><Link to={"#"} className="dropdown-item">Dropshipping Services</Link></li>
-                                    <li><Link to={"#"} className="dropdown-item">E-commerce Support</Link></li>
-                                    <li><Link to={"#"} className="dropdown-item">International Shipping</Link></li>
-                                    <li><Link to={"#"} className="dropdown-item">Business Growth</Link></li>
+                                    <li><Link to={`/services`} className="dropdown-item">Product Sourcing</Link></li>
+                                    <li><Link to={`/services`} className="dropdown-item">Dropshipping Services</Link></li>
+                                    <li><Link to={`/services`} className="dropdown-item">E-commerce Support</Link></li>
+                                    <li><Link to={`/services`} className="dropdown-item">International Shipping</Link></li>
+                                    <li><Link to={`/services`} className="dropdown-item">Business Growth</Link></li>
                                 </ul>
                             </li>
-                            <li className="nav-item dropdown">
+                            {/* <li className="nav-item dropdown">
                                 <Link className="nav-link px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Global Marketplaces
                                 </Link>
@@ -48,9 +48,9 @@ const Navbar = () => {
                                     <li><Link to={"#"} className="dropdown-item">AliBaba</Link></li>
                                     <li><Link to={"#"} className="dropdown-item">AliExpress</Link></li>
                                 </ul>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
-                                <NavLink to={"/how-it-works"} className="nav-link px-4" aria-current="page">How it Works?</NavLink>
+                                <NavLink to={"/faqs"} className="nav-link px-4" aria-current="page">FAQs</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink to={"/blogs"} className="nav-link px-4" aria-current="page">Blog</NavLink>
@@ -59,13 +59,13 @@ const Navbar = () => {
                                 <NavLink to={"/support"} className="nav-link px-4" aria-current="page">Contact</NavLink>
                             </li>
                         </ul>
-                        <Link to="#" className="ms-lg-5 text-dark position-relative">
+                        {/* <Link to="#" className="ms-lg-5 text-dark position-relative">
                             <FiShoppingCart size={24} />
                             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 0
                                 <span className="visually-hidden">unread messages</span>
                             </span>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </nav>

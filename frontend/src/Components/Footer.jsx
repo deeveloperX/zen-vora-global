@@ -129,46 +129,11 @@ const Footer = () => {
               Our Services
             </h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small">
-              <li>
-                <Link
-                  to={`#`}
-                  className="text-white-50 text-decoration-none footer-link"
-                >
-                  Product Sourcing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`#`}
-                  className="text-white-50 text-decoration-none footer-link"
-                >
-                  Dropshipping Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`#`}
-                  className="text-white-50 text-decoration-none footer-link"
-                >
-                  E-commerce Support
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`#`}
-                  className="text-white-50 text-decoration-none footer-link"
-                >
-                  International Shipping
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`#`}
-                  className="text-white-50 text-decoration-none footer-link"
-                >
-                  Business Growth &amp; SEO
-                </Link>
-              </li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Product Sourcing</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Dropshipping Services</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">E-commerce Support</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">International Shipping</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Business Growth</Link></li>
             </ul>
           </div>
 
@@ -178,10 +143,6 @@ const Footer = () => {
               Get in Touch
             </h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small mb-4">
-              <li className="d-flex align-items-center gap-2 text-white-50">
-                <BsGeoAlt className="text-orange flex-shrink-0" />
-                <span>Lahore, Pakistan / Global Operations</span>
-              </li>
               <li className="d-flex align-items-center gap-2 text-white-50">
                 <BsTelephone className="text-orange flex-shrink-0" />
                 <a
@@ -200,6 +161,10 @@ const Footer = () => {
                   zenvoraglobalventures@gmail.com
                 </a>
               </li>
+                <li className="d-flex align-items-center gap-2 text-white-50">
+                  <BsGeoAlt className="text-orange flex-shrink-0" />
+                  <span>Office#125, Nasheman-e-Iqbal Phase 2, Lahore, Pakistan</span>
+                </li>
             </ul>
           </div>
         </div>
