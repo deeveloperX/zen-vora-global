@@ -10,6 +10,8 @@ import Blogs from './Pages/Blogs'
 import BlogDetails from './Pages/BlogDetails'
 import FaqPage from './Pages/FaqPage'
 import ServicesPage from './Pages/ServicesPage'
+import PrivacyPolicy from './Pages/PrivacyPolicy'
+import TermsConditions from './Pages/TermsConditions'
 
 function App() {
 
@@ -26,6 +28,8 @@ function App() {
           <Route path='/blogs/:id' element={<BlogDetails />} />
           <Route path='/faqs' element={<FaqPage />} />
           <Route path='/services' element={<ServicesPage />} />
+          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/terms-conditions' element={<TermsConditions/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>
