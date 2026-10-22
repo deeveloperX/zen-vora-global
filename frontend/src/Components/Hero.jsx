@@ -1,4 +1,3 @@
-import heroBg from '../assets/hero.png';
 import { Link } from 'react-router';
 import { FaPlay } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -9,16 +8,13 @@ const Hero = () => {
     <section 
       className="hero-section text-dark position-relative d-flex align-items-center py-5"
       style={{
-        backgroundImage: `url(${heroBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center right',
         minHeight: '85vh',
         width: '100%'
       }}
     >
       <div className="container py-4 py-lg-5">
         <div className="row">
-          <div className="col-12 col-md-7 col-lg-5">
+          <div className="col-12 col-md-7 col-lg-5 hero-content">
             
             {/* Tagline */}
             <p className="fw-semibold text-mySecondary text-uppercase mb-2" style={{letterSpacing: '0.5px' }}>

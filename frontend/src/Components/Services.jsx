@@ -2,9 +2,7 @@ import { servicesData } from '../data/ServicesData';
 
 const Services = () => {
   return (
-    <section className="py-5" style={{ backgroundColor: '#f0f4f8' }}>
-      <div className="container-fluid px-lg-5 py-3">
-        
+    <section className="py-5 my-4 bg-light-subtle container-fluid px-lg-5 py-3">
         {/* Header Section */}
         <div className="text-center mb-5">
           <p className="fw-semibold text-uppercase mb-1" style={{ color: '#ff6600', letterSpacing: '1px', fontSize: '0.9rem' }}>
@@ -68,8 +66,6 @@ const Services = () => {
             );
           })}
         </div>
-
-      </div>
     </section>
   );
 };

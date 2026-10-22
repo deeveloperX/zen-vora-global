@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 const WhyPartner = () => {
   return (
-    <section className="py-5 bg-white border-top">
+    <section className="py-3 py-lg-5 bg-white">
         <div className="container py-4">
           <div className="row align-items-center g-5">
             

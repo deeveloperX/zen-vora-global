@@ -1,11 +1,28 @@
 // import { FiShoppingCart  } from "react-icons/fi";
+import { useRef } from 'react';
 import { Link, NavLink } from 'react-router';
 import Logo from '../assets/android-chrome-192x192.png';
 
 const Navbar = () => {
+    const collapseRef = useRef(null);
+    const togglerRef = useRef(null);
+
+    const handleNavigationClick = (event) => {
+        const target = event.target;
+        if (
+            target instanceof Element &&
+            target.closest('a') &&
+            !target.closest('[data-bs-toggle="dropdown"]') &&
+            window.matchMedia('(max-width: 991.98px)').matches &&
+            collapseRef.current?.classList.contains('show')
+        ) {
+            togglerRef.current?.click();
+        }
+    };
+
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+            <nav onClick={handleNavigationClick} className="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
                 <div className="container-fluid px-md-4 px-lg-5">
                     <Link to={`/`} className="navbar-brand d-flex align-items-center gap-1">
                         <img alt="logo" src={Logo} style={{ width: "80px" }} />
@@ -14,10 +31,10 @@ const Navbar = () => {
                             <p className="m-0 text-center text-myPrimary" style={{ fontSize: "14px" }}>Global Ventures</p>
                         </div>
                     </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button ref={togglerRef} className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon" />
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div ref={collapseRef} className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                             <li className="nav-item">
                                 <NavLink to={"/"} className="nav-link px-4" aria-current="page">Home</NavLink>

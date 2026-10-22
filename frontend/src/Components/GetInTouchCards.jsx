@@ -18,9 +18,9 @@ const GetInTouchCards = () => {
                         — Get In Touch —
                     </p>
 
-                </div>
+                </div>  
 
-                <div className="row g-4 mb-5">
+                <div className="row g-4">
                     <div className="col-12 col-sm-6 col-lg-3">
                         <div className="card h-100 border-0 shadow-sm rounded-4 text-center p-4 contact-card">
                             <div className="icon-wrapper mx-auto mb-3 bg-dark-blue-subtle text-dark-blue rounded-circle d-flex align-items-center justify-content-center">

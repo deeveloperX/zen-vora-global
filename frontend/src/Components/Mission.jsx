@@ -37,7 +37,7 @@ const Mission = () => {
   ];
 
   return (
-    <section className="py-5" >
+    <section className="py-3" >
       <div className="container py-4">
         
         {/* Section Header */}
@@ -51,7 +51,7 @@ const Mission = () => {
         <div className="row g-4 justify-content-center">
           {pillars.map((item, index) => (
             <div key={index} className="col-12 col-md-4">
-              <div className="card h-100 border-0 rounded-4 p-4 shadow-sm bg-white position-relative overflow-hidden">
+              <div className="card h-100 border -0 rounded-4 p-4 shadow-sm bg-white position-relative overflow-hidden">
                 
                 {/* Top Accent Line */}
                 <div 
@@ -61,13 +61,13 @@ const Mission = () => {
 
                 {/* Icon Container */}
                 <div 
-                  className="mb-3 rounded-3 d-inline-flex align-items-center justify-content-center shadow-sm bg-myPrimary"
+                  className="mb-4 rounded-3 d-inline-flex align-items-center justify-content-center shadow-sm bg-myPrimary"
                   style={{ width: '50px', height: '50px' }}
                 >
                   {item.icon}
                 </div>
 
-                <h5 className="fw-bold text-dark mb-2">
+                <h5 className="fw-bold text-dark mb-4   ">
                   {item.title}
                 </h5>
 

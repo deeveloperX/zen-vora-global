@@ -10,8 +10,7 @@ const CtaBanner = () => {
   ];
 
   return (
-    <section className="cta-banner-section  ">
-      <div className="container-fluid px-lg-5">
+    <section className="container-fluid px-lg-5 my-5">
         <div className="cta-banner-card bg-myPrimary rounded-4 overflow-hidden shadow-lg text-white p-3 p-lg-1">
           <div className="row g-0 align-items-center">
             
@@ -52,7 +51,6 @@ const CtaBanner = () => {
 
           </div>
         </div>
-      </div>
     </section>
   );
 };
