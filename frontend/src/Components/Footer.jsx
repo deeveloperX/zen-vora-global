@@ -56,11 +56,11 @@ const Footer = () => {
           <div className="col-6 col-md-6 col-lg-3">
             <h6 className="fw-bold text-white mb-3 fs-6 border-bottom border-orange pb-2 d-inline-block mb-lg-4">Our Services</h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small">
-              <li><Link to={`#`} className="text-white-50 text-decoration-none footer-link">Product Sourcing</Link></li>
-              <li><Link to={`#`} className="text-white-50 text-decoration-none footer-link">Dropshipping Services</Link></li>
-              <li><Link to={`#`} className="text-white-50 text-decoration-none footer-link">E-commerce Support</Link></li>
-              <li><Link to={`#`} className="text-white-50 text-decoration-none footer-link">International Shipping</Link></li>
-              <li><Link to={`#`} className="text-white-50 text-decoration-none footer-link">Business Growth &amp; SEO</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Product Sourcing</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Dropshipping Services</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">E-commerce Support</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">International Shipping</Link></li>
+              <li><Link to={`/services`} className="text-white-50 text-decoration-none footer-link">Business Growth</Link></li>
             </ul>
           </div>
 
@@ -69,10 +69,6 @@ const Footer = () => {
             <h6 className="fw-bold text-white mb-3 fs-6 border-bottom border-orange pb-2 d-inline-block mb-lg-4">Get in Touch</h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small mb-4">
               <li className="d-flex align-items-center gap-2 text-white-50">
-                <BsGeoAlt className="text-orange flex-shrink-0" />
-                <span>Lahore, Pakistan / Global Operations</span>
-              </li>
-              <li className="d-flex align-items-center gap-2 text-white-50">
                 <BsTelephone className="text-orange flex-shrink-0" />
                 <a href="tel:+923203664619" className="text-white-50 text-decoration-none footer-link">+92 320 3664619</a>
               </li>
@@ -80,6 +76,10 @@ const Footer = () => {
                 <BsEnvelope className="text-orange flex-shrink-0" />
                 <a href="mailto:zenvoraglobalventures@gmail.com" className="text-white-50 text-decoration-none footer-link">zenvoraglobalventures@gmail.com</a>
               </li>
+                <li className="d-flex align-items-center gap-2 text-white-50">
+                  <BsGeoAlt className="text-orange flex-shrink-0" />
+                  <span>Office#125, Nasheman-e-Iqbal Phase 2, Lahore, Pakistan</span>
+                </li>
             </ul>
           </div>
 

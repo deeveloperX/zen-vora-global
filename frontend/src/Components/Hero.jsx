@@ -42,14 +42,14 @@ const Hero = () => {
 
             {/* Action Buttons */}
             <div className="d-flex flex-wrap gap-3 align-items-center">
-              <Link to={`#`}
-                className="btn bg-mySecondary rounded-pill px-4 py-2 fw-semibold text-white shadow-sm d-inline-flex align-items-center gap-2"
+              <Link to={`/support`}
+                className="btn bg-mySecondary hover-mySecondary rounded-pill px-4 py-2 fw-semibold text-white shadow-sm d-inline-flex align-items-center gap-2"
               >
-                Get Started <FaArrowRightLong />
+                Free Consultation <FaArrowRightLong />
               </Link>
 
-              <Link to={`#`}
-                className="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2"
+              <Link to={`/services`}
+                className="btn btn-outline-myPrimary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2"
               >
                 <FaPlay /> Learn More
               </Link>

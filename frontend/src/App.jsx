@@ -8,11 +8,13 @@ import Navbar from './Components/Navbar'
 import Contact from './Pages/Contact'
 import Blogs from './Pages/Blogs'
 import BlogDetails from './Pages/BlogDetails'
+import FaqPage from './Pages/FaqPage'
+import ServicesPage from './Pages/ServicesPage'
 
 function App() {
 
   return (
-    <>
+    <div className='overflow-x-hidden'>
       <BrowserRouter>
       <TopBar />
       <Navbar />
@@ -22,10 +24,12 @@ function App() {
           <Route path='/support' element={<Contact   />} />
           <Route path='/blogs' element={<Blogs />} />
           <Route path='/blogs/:id' element={<BlogDetails />} />
+          <Route path='/faqs' element={<FaqPage />} />
+          <Route path='/services' element={<ServicesPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 
