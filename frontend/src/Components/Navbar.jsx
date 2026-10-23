@@ -27,7 +27,7 @@ const Navbar = () => {
                     <Link to={`/`} className="navbar-brand d-flex align-items-center gap-1">
                         <img alt="logo" src={Logo} style={{ width: "80px" }} />
                         <div>
-                            <h3 className="m-0 fw-bold text-center text-myPrimary">Zen Vora</h3>
+                            <h3 className="m-0 fw-bold text-center text-myPrimary">ZenVora</h3>
                             <p className="m-0 text-center text-myPrimary" style={{ fontSize: "14px" }}>Global Ventures</p>
                         </div>
                     </Link>

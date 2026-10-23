@@ -23,7 +23,7 @@ const Hero = () => {
 
             {/* Main Heading */}
             <h1 className="display-4 fw-bold mb-3 text-myPrimary" style={{lineHeight: '1.15' }}>
-              Zen Vora<br />Global Ventures
+              ZenVora<br />Global Ventures
             </h1>
 
             {/* Subheading */}

@@ -26,7 +26,7 @@ const Footer = () => {
                 style={{ width: "60px" }}
               />
               <div className="d-flex flex-column lh-1">
-                <span className="fw-bold fs-5 text-white">Zen Vora</span>
+                <span className="fw-bold fs-5 text-white">ZenVora</span>
                 <span className="small text-white-50 uppercase-subtext">
                   Global Ventures
                 </span>
@@ -173,7 +173,7 @@ const Footer = () => {
           {/* Left Side: Copyright */}
           <div className="col-12 col-md-6 text-center text-md-start mb-2 mb-md-0">
             <p className="small text-white-50 mb-0">
-              &copy; {new Date().getFullYear()} Zen Vora Global Ventures (LLC).
+              &copy; {new Date().getFullYear()} ZenVora Global Ventures (LLC).
               All rights reserved.
             </p>
           </div>
