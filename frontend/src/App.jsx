@@ -12,6 +12,8 @@ import FaqPage from './Pages/FaqPage'
 import ServicesPage from './Pages/ServicesPage'
 import PrivacyPolicy from './Pages/PrivacyPolicy'
 import TermsConditions from './Pages/TermsConditions'
+import { FloatingWhatsApp } from 'react-floating-whatsapp'
+import logo from './assets/android-chrome-192x192.png'
 
 function App() {
 
@@ -32,6 +34,19 @@ function App() {
           <Route path='/terms-conditions' element={<TermsConditions/>}/>
         </Routes>
         <Footer />
+        <FloatingWhatsApp
+          phoneNumber='923203664619'
+          accountName='ZenVora Global'
+          statusMessage="We're here to help!"
+          chatMessage='Hello! How can we help you?'
+          notificationClassName='floating-whatsapp-notification'
+          notificationStyle={{ backgroundColor: '#d50d0d' }}
+          avatar={logo}
+          className='custom-chatbox'
+          allowClickAway="true"
+          darkMode="true"
+          
+        />
       </BrowserRouter>
     </div>
   )

@@ -147,3 +147,15 @@
     width: 75%;
   }  
 }
+
+/* whatsapp FAB start */
+.custom-chatbox img, 
+.custom-chatbox ._floating-whatsapp-avatar {
+  filter: invert(1) !important;
+}
+
+.custom-chatbox button[type="submit"] svg,
+.custom-chatbox ._floating-whatsapp-submit-btn svg {
+  fill: #129569 !important; /* Replace with your custom hex color */
+}
+/* whatsapp FAB end */
