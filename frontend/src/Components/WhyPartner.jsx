@@ -8,7 +8,7 @@ const WhyPartner = () => {
           <div className="row align-items-center g-5">
             
             <div className="col-12 col-lg-6">
-              <span className="text-mySecondary fw-semibold text-uppercase small tracking-wide">Why Partner With Zen Vora</span>
+              <span className="text-mySecondary fw-semibold text-uppercase small tracking-wide">Why Partner With ZenVora</span>
               <h2 className="fw-bold text-myPrimary display-6 mt-1 mb-3">Built for E-Commerce Entrepreneurs</h2>
               <p className="text-muted mb-4 small lh-lg">
                 Running an e-commerce brand involves juggling suppliers, logistics, advertising, and customer service. We handle the heavy lifting so you can focus on scaling your revenue.

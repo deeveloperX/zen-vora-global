@@ -38,7 +38,7 @@ const Footer = () => {
               business growth.
             </p>
             {/* Social Icons */}
-            <div className="d-flex align-items-center gap-3">
+            {/* <div className="d-flex align-items-center gap-3">
               <a
                 href="#facebook"
                 className="social-icon-link text-white bg-white bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center p-2"
@@ -63,7 +63,7 @@ const Footer = () => {
               >
                 <BsInstagram size={16} />
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Column 2: Quick Links */}
@@ -74,7 +74,7 @@ const Footer = () => {
             <ul className="list-unstyled d-flex flex-column gap-2 small">
               <li>
                 <Link
-                  to={`/home`}
+                  to={`/`}
                   className="text-white-50 text-decoration-none footer-link"
                 >
                   Home
@@ -96,14 +96,15 @@ const Footer = () => {
                   Our Services
                 </Link>
               </li>
-              <li>
+              {/* <li>
+
                 <Link
                   to={`/marketplaces`}
                   className="text-white-50 text-decoration-none footer-link"
                 >
                   Marketplaces
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to={`/blogs`}
