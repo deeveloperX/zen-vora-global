@@ -23,7 +23,7 @@ const Services = () => {
 
             return (
               <div key={service.id} className="col-12 col-sm-6 col-md-4 col-lg" style={{ minWidth: '220px' }}>
-                <div className="card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column">
+                <div className="card feature-card h-100 border-0 rounded-4 shadow-sm bg-white overflow-hidden d-flex flex-column">
                   
                   {/* Image Container */}
                   <div style={{ height: '140px', overflow: 'hidden' }}>

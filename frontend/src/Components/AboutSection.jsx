@@ -156,8 +156,8 @@ const AboutSection = () => {
 
             {/* CTA Button */}
             <Link
-              to={`/hello`}
-              className="btn rounded-pill px-4 py-2 fw-semibold text-white shadow-sm d-inline-flex align-items-center gap-2 bg-myPrimary"
+              to={`/services`}
+              className="btn btn-outline-myPrimary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2"
               style={{ borderColor: "#0d1b2a" }}
             >
               Discover Our Story <FaArrowRightLong />
