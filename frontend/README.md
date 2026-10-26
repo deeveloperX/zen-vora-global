@@ -1,16 +1,46 @@
-# React + Vite
+# ZenVora Global Ventures
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend for the ZenVora Global Ventures website. It is a single-page application built with React and Vite, with client-side routing for the company’s information, services, support, blog, FAQ, and legal pages.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js `^20.19.0`, `^22.12.0`, or newer
+- npm
 
-## React Compiler
+## Getting started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Run these commands from the `frontend` directory:
 
-## Expanding the ESLint configuration
+```sh
+npm ci
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Vite prints the local development URL in the terminal when the server starts.
+
+## Available commands
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Vite development server. |
+| `npm run build` | Create a production build in `dist/`. |
+| `npm run preview` | Serve the production build locally for preview. |
+| `npm run lint` | Run ESLint across the frontend. |
+
+## Pages
+
+| Path | Page |
+| --- | --- |
+| `/` | Home |
+| `/about` | About |
+| `/services` | Services |
+| `/support` | Contact and support |
+| `/blogs` | Blog listing |
+| `/blogs/:id` | Blog details |
+| `/faqs` | Frequently asked questions |
+| `/privacy-policy` | Privacy policy |
+| `/terms-conditions` | Terms and conditions |
+
+## Deployment
+
+The Vercel configuration rewrites incoming paths to `index.html`, allowing the client-side router to serve direct visits to application routes. Build the site with `npm run build`; the generated static files are in `dist/`. 
