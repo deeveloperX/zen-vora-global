@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const siteSettingsRoutes = require('./routes/siteSettingsRoutes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/site-settings', siteSettingsRoutes);
 
 // Base Test Route
 app.get('/', (req, res) => {
