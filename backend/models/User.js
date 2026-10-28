@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['user', 'admin'],
-    default: 'user' // Default is standard user; set to 'admin' for admin accounts
+    default: 'admin'
   },
   createdAt: {
     type: Date,

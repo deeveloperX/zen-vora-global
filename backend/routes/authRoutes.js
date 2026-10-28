@@ -5,44 +5,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { verifyAdmin } = require('../middleware/auth');
 
-// -------------------------------------------------------------
-// 1. SIGNUP ROUTE (POST /api/auth/signup)
-// -------------------------------------------------------------
-router.post('/signup', async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body;
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already registered' });
-    }
-
-    // Hash the password securely
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user (Role defaults to 'user' unless explicitly specified)
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      role: role || 'user'
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ 
-      message: 'User registered successfully!',
-      user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role }
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during signup', error: error.message });
-  }
+// Public registration is disabled. Keep this explicit response for old clients.
+router.post('/signup', (req, res) => {
+  res.status(410).json({ message: 'Public registration is disabled' });
 });
 
 // -------------------------------------------------------------
-// 2. LOGIN ROUTE (POST /api/auth/login)
+// ADMIN LOGIN ROUTE (POST /api/auth/login)
 // -------------------------------------------------------------
 router.post('/login', async (req, res) => {
   try {
@@ -57,6 +26,10 @@ router.post('/login', async (req, res) => {
     // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+
+    if (user.role !== 'admin') {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
@@ -78,7 +51,7 @@ router.post('/login', async (req, res) => {
 });
 
 // -------------------------------------------------------------
-// 3. ADMIN USER DATA ROUTE (GET /api/auth/users)
+// ADMIN USER DATA ROUTE (GET /api/auth/users)
 // Protected: Only accessible with a valid Admin JWT token!
 // -------------------------------------------------------------
 router.get('/users', verifyAdmin, async (req, res) => {
