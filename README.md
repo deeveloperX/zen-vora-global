@@ -32,7 +32,7 @@ See the [frontend README](./frontend/README.md) for the app’s pages and deploy
 
 ## Admin access
 
-Public account registration is disabled. Only accounts with the `admin` role can log in or access protected admin endpoints.
+Signup creates `user` accounts by default. To create an admin through `POST /api/auth/signup`, configure a private `ADMIN_SIGNUP_KEY` in the backend environment and send it as the `x-admin-signup-key` request header with `"role": "admin"`. Do not expose this key to frontend code or send it over an insecure connection. Only accounts with the `admin` role can access protected admin endpoints.
 
 To create an administrator or reset an existing administrator’s password, run this from `backend/` with the MongoDB connection available in `MONGO_URI`:
 
