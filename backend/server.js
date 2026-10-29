@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const siteSettingsRoutes = require('./routes/siteSettingsRoutes');
 const legalRoutes = require('./routes/legalRoutes');
+const faqRoutes = require('./routes/faqRoutes');
 
 const app = express();
 
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/auth', authRoutes);
 app.use('/api/site-settings', siteSettingsRoutes);
 app.use('/api/legal', legalRoutes);
+app.use('/api/faqs', faqRoutes);
 
 // Base Test Route
 app.get('/', (req, res) => {
