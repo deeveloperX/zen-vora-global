@@ -8,6 +8,7 @@ const siteSettingsRoutes = require('./routes/siteSettingsRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const legalRoutes = require('./routes/legalRoutes');
 const faqRoutes = require('./routes/faqRoutes');
+const blogRoutes = require('./routes/blogRoutes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/site-settings', siteSettingsRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/faqs', faqRoutes);
+app.use('/api/blogs', blogRoutes);
 
 // Base Test Route
 app.get('/', (req, res) => {
