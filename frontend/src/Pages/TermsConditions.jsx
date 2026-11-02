@@ -1,7 +1,15 @@
-import React from 'react';
-import { termsData } from '../data/LegalData';
+import { useState } from "react";
+import { termsData as defaultTermsData } from "../data/LegalData";
+import { readAdminContent } from "../data/AdminContent";
+
+const LEGAL_STORAGE_KEY = "zenvora-admin-legal";
 
 const TermsConditions = () => {
+  const [termsData] = useState(
+    () =>
+      readAdminContent(LEGAL_STORAGE_KEY, { terms: defaultTermsData }).terms,
+  );
+
   return (
     <div className="bg-light py-4">
       <div className="container py-4">
@@ -11,7 +19,9 @@ const TermsConditions = () => {
             Service Agreement
           </span>
           <h1 className="display-5 fw-bold mb-2">{termsData.title}</h1>
-          <p className="text-white-50 mb-0">Last Updated: {termsData.lastUpdated}</p>
+          <p className="text-white-50 mb-0">
+            Last Updated: {termsData.lastUpdated}
+          </p>
         </div>
 
         {/* Content Body */}
@@ -25,12 +35,16 @@ const TermsConditions = () => {
                 <div key={index} className="mb-4">
                   <h3 className="h4 fw-bold text-dark mb-3">{section.title}</h3>
                   <p className="text-muted">{section.content}</p>
-                  
+
                   {section.list && (
                     <ul className="list-group list-group-flush my-3">
                       {section.list.map((item, i) => (
-                        <li key={i} className="list-group-item bg-transparent border-0 text-muted py-1 ps-0">
-                          <i className="bi bi-check-circle-fill text-warning me-2"></i> {item}
+                        <li
+                          key={i}
+                          className="list-group-item bg-transparent border-0 text-muted py-1 ps-0"
+                        >
+                          <i className="bi bi-check-circle-fill text-warning me-2"></i>{" "}
+                          {item}
                         </li>
                       ))}
                     </ul>
