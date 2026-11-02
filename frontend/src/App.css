@@ -1,4 +1,25 @@
 /* global css start */
+.admin-sidebar {
+  width: 250px;
+  min-height: 100vh;
+}
+
+@media (max-width: 767.98px) {
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .admin-sidebar .nav {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .admin-sidebar .nav-link {
+    white-space: nowrap;
+  }
+}
+
 :root {
   --primary-color: #051f47; /*dark-blue*/
   --secondary-color: rgb(241, 122, 11); /*orangish*/
