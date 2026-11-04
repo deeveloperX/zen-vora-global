@@ -20,6 +20,26 @@
   }
 }
 
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.admin-sidebar-link:hover {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.admin-sidebar-link.active {
+  background-color: var(--bs-primary);
+  color: #fff;
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
 :root {
   --primary-color: #051f47; /*dark-blue*/
   --secondary-color: rgb(241, 122, 11); /*orangish*/

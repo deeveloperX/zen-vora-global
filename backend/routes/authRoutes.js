@@ -10,7 +10,7 @@ const { verifyAdmin } = require('../middleware/auth');
 // -------------------------------------------------------------
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -22,12 +22,12 @@ router.post('/signup', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user (Role defaults to 'user' unless explicitly specified)
+    // Public signup must not grant privileged roles.
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role: role || 'user'
+      role: 'user'
     });
 
     await newUser.save();
@@ -60,6 +60,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
     // Generate JWT Token with user id and role
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -75,6 +79,16 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error during login', error: error.message });
   }
+});
+
+// Verify the current admin session
+router.get('/me', verifyAdmin, (req, res) => {
+  res.json({
+    user: {
+      id: req.user.id,
+      role: req.user.role
+    }
+  });
 });
 
 // -------------------------------------------------------------

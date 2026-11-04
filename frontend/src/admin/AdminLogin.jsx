@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { AUTH_API_URL } from './authApi';
 
 export default function AdminLogin() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,20 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const requestedPath = location.state?.from;
+  const returnTo =
+    requestedPath &&
+    typeof requestedPath.pathname === 'string' &&
+    (requestedPath.pathname === '/dashboard' ||
+      requestedPath.pathname.startsWith('/dashboard/'))
+      ? {
+          pathname: requestedPath.pathname,
+          search: requestedPath.search || '',
+          hash: requestedPath.hash || '',
+        }
+      : '/dashboard/blogs';
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +35,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${AUTH_API_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,11 +49,14 @@ export default function AdminLogin() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Save token and navigate to Admin Dashboard
+      if (!data.token || data.user?.role !== 'admin') {
+        throw new Error('This account does not have admin access.');
+      }
+
       localStorage.setItem('token', data.token);
-      navigate('/dashboard/blogs');
+      navigate(returnTo, { replace: true });
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

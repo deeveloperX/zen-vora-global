@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import {
   HiHome,
   HiDocumentText,
@@ -11,6 +11,13 @@ import {
 } from "react-icons/hi";
 
 export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    navigate('/admin', { replace: true });
+  };
   return (
     <div
       className="d-flex flex-column flex-shrink-0 p-3 bg-transparent border-end position-relative"
@@ -29,8 +36,8 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
               ZV
             </div>
             <div>
-              <span className="fs-5 fw-bold text-dark d-block text-truncate">ZenVora Admin</span>
-              <small className="text-muted text-truncate d-block" style={{ fontSize: '11px' }}>Global CMS v1.0</small>
+              <span className="fs-5 fw-bold text-dark d-block text-truncate">Admin</span>
+              <small className="text-muted text-truncate d-block" style={{ fontSize: '11px' }}>ZenVora Global</small>
             </div>
           </div>
         ) : (
@@ -56,9 +63,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
           <NavLink
             to="/dashboard"
             end
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary hover-bg-light"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
            
             <HiHome className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -69,9 +74,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <li className="nav-item">
           <NavLink
             to="/dashboard/blogs"
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
             
             <HiDocumentText className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -82,9 +85,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <li className="nav-item">
           <NavLink
             to="/dashboard/services"
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
             
             <HiCog className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -95,9 +96,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <li className="nav-item">
           <NavLink
             to="/dashboard/highlights"
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
             
             <HiStar className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -108,9 +107,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <li className="nav-item">
           <NavLink
             to="/dashboard/faqs"
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
             
             <HiQuestionMarkCircle className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -121,9 +118,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <li className="nav-item">
           <NavLink
             to="/dashboard/legal"
-            className={({ isActive }) =>
-              `nav-link px-3 py-2 fw-semibold rounded-3 d-flex align-items-center ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary"}`
-            }
+            className="nav-link admin-sidebar-link"
           >
             
             <HiShieldCheck className={`fs-5 ${!isCollapsed ? 'me-3' : ''}`} />
@@ -138,14 +133,14 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
         <div
           className={`d-flex align-items-center p-2 bg-light rounded-3 ${isCollapsed ? "justify-content-center" : ""}`}
         >
-          <div
-            className="bg-success rounded-circle flex-shrink-0"
-            style={{ width: "8px", height: "8px" }}
-          ></div>
+          
           {!isCollapsed && (
-            <small className="text-muted fw-medium ms-2 text-truncate">
-              System Online
-            </small>
+           <button 
+            onClick={handleLogout} 
+            className="btn btn-outline-danger btn-sm px-3 fw-semibold w-100"
+          >
+            Logout
+          </button>
           )}
         </div>
       </div>
