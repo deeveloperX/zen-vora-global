@@ -39,18 +39,18 @@ router.post('/signup', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error during signup', error: error.message });
   }
-});
-
+}); 
 // -------------------------------------------------------------
-// 2. LOGIN ROUTE (POST /api/auth/login)
+// LOGIN ROUTE (POST /api/auth/login)
 // -------------------------------------------------------------
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
     // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
+    const user = normalizedEmail ? await User.findOne({ email: normalizedEmail }) : null;
+    if (!user || typeof password !== 'string') {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
@@ -78,7 +78,7 @@ router.post('/login', async (req, res) => {
 });
 
 // -------------------------------------------------------------
-// 3. ADMIN USER DATA ROUTE (GET /api/auth/users)
+// ADMIN USER DATA ROUTE (GET /api/auth/users)
 // Protected: Only accessible with a valid Admin JWT token!
 // -------------------------------------------------------------
 router.get('/users', verifyAdmin, async (req, res) => {
