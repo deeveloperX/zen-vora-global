@@ -14,12 +14,19 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = (
+  process.env.FRONTEND_ORIGINS ||
+  'http://localhost:5173,http://127.0.0.1:5173'
+)
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-// Connect to Local MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to Local MongoDB (zenvora) Successfully!'))
-  .catch((err) => console.error('MongoDB Connection Error:', err));
+app.use(cors({
+  origin: (origin, callback) => {
+    callback(null, !origin || allowedOrigins.includes(origin));
+  }
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -35,6 +42,18 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+async function startServer() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('Connected to MongoDB (zenvora) Successfully!');
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('MongoDB Connection Error:', error);
+    process.exitCode = 1;
+  }
+}
+
+startServer();
