@@ -32,14 +32,12 @@ See the [frontend README](./frontend/README.md) for the app’s pages and deploy
 
 ## Admin access
 
-Signup creates `user` accounts by default. To create an admin through `POST /api/auth/signup`, configure a private `ADMIN_SIGNUP_KEY` in the backend environment and send it as the `x-admin-signup-key` request header with `"role": "admin"`. Do not expose this key to frontend code or send it over an insecure connection. Only accounts with the `admin` role can access protected admin endpoints.
+Public signup creates `user` accounts only. To create an administrator or reset an existing administrator’s password, run this from `backend/` with the MongoDB connection available in `MONGO_URI`:
 
-To create an administrator or reset an existing administrator’s password, run this from `backend/` with the MongoDB connection available in `MONGO_URI`:
-
-```sh
-ADMIN_NAME="Your Name" \
-ADMIN_EMAIL="example@example.com" \
-ADMIN_PASSWORD="use-a-unique-password-of-at-least-6-characters" \
+```powershell
+$env:ADMIN_NAME = "Your Name"
+$env:ADMIN_EMAIL = "example@example.com"
+$env:ADMIN_PASSWORD = "use-a-unique-password-of-at-least-6-characters"
 npm run create-admin
 ```
 
