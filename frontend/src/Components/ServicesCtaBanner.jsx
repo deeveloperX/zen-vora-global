@@ -8,10 +8,6 @@ const ServicesCtaBanner = () => {
                 </span>
                 <h1 className="display-5 fw-bold mb-2">Our E-Commerce Services</h1>
                 <p className="text-white-50 mb-0">From strategic product sourcing and global fulfillment to complete marketplace management, we equip your online business for scalable, long-term growth.</p>
-                <a href="/services#services-grid" className="btn px-0 mt-3 fw-semibold text-white d-inline-flex align-items-center gap-2" style={{ width: "fit-content" }}>
-                    <span>Explore Services</span>
-                    <BsArrowRight />
-                </a>
             </div>
         </section>
     )

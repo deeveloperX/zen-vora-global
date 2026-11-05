@@ -45,4 +45,14 @@ Vite prints the local development URL in the terminal when the server starts.
 
 The Vercel configuration rewrites incoming paths to `index.html`, allowing the client-side router to serve direct visits to application routes. Build the site with `npm run build`; the generated static files are in `dist/`.
 
-The admin login and session check use `VITE_API_URL` as the backend origin. Set it in the frontend build environment for deployment; it defaults to `http://localhost:5000` for local development.
+The frontend API uses `VITE_API_URL` as the backend origin; it defaults to `http://localhost:5000` for local development. Create `frontend/.env.local` with:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+Restart Vite after changing this value. In production, set it to the deployed backend origin in the frontend build environment and configure the backend's `FRONTEND_ORIGINS` environment variable with the exact frontend origin (comma-separated if multiple origins are needed).
+
+Public FAQs and services are loaded from `GET /api/faqs` and `GET /api/services`. Admin content management requires an administrator account. Create or reset one from `backend/` by setting `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the environment and running `npm run create-admin`; the backend must also have `MONGO_URI` configured.
+
+To insert the original five sample services into an empty database, run `npm run seed-services` from `backend/` with `MONGO_URI` configured. The command refuses to add records if the service collection is not empty. Services support a title, description, image URL, icon key, and display order.

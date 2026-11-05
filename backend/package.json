@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "create-admin": "node scripts/create-admin.js",
+    "seed-services": "node scripts/seed-services.js"
   },
   "keywords": [],
   "author": "",
