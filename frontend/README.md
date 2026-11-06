@@ -45,7 +45,7 @@ Vite prints the local development URL in the terminal when the server starts.
 
 The Vercel configuration rewrites incoming paths to `index.html`, allowing the client-side router to serve direct visits to application routes. Build the site with `npm run build`; the generated static files are in `dist/`.
 
-The frontend API uses `VITE_API_URL` as the backend origin; it defaults to `http://localhost:5000` for local development. Create `frontend/.env.local` with:
+The frontend API uses `VITE_API_URL` as the backend origin. It defaults to `http://localhost:5000` during local development; production builds require `VITE_API_URL` to be set in the deployment environment. In Vercel, configure it separately for Preview and Production deployments. Create `frontend/.env.local` with:
 
 ```env
 VITE_API_URL=http://localhost:5000
