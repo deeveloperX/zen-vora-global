@@ -1,28 +1,8 @@
-import { useState } from "react";
-import { servicesData } from "../data/ServicesData";
-import { readAdminContent } from "../data/AdminContent";
-
-const SERVICE_STORAGE_KEY = "zenvora-admin-services";
-const initialServices = servicesData.map((service) => ({
-  id: service.id,
-  title: service.title,
-  description: service.description,
-  image: service.image,
-}));
+import ServiceIcon from "./ServiceIcon";
+import useServices from "../hooks/useServices";
 
 const Services = () => {
-  const [services] = useState(() => {
-    const savedServices = readAdminContent(
-      SERVICE_STORAGE_KEY,
-      initialServices,
-    );
-    return savedServices.map((service) => ({
-      ...service,
-      icon:
-        servicesData.find((item) => item.id === service.id)?.icon ||
-        servicesData[0].icon,
-    }));
-  });
+  const { services, loading, error } = useServices();
 
   return (
     <section className="py-5 my-4 bg-light-subtle container-fluid px-lg-5 py-3">
@@ -51,12 +31,24 @@ const Services = () => {
 
       {/* 5 Cards Row */}
       <div className="row g-3 justify-content-center align-items-stretch">
-        {services.map((service) => {
-          const IconComponent = service.icon;
-
-          return (
+        {loading && (
+          <p className="text-muted text-center" role="status">
+            Loading services...
+          </p>
+        )}
+        {error && (
+          <p className="text-danger text-center" role="alert">
+            {error}
+          </p>
+        )}
+        {!loading && !error && services.length === 0 && (
+          <p className="text-muted text-center">No services are available yet.</p>
+        )}
+        {!loading &&
+          !error &&
+          services.map((service) => (
             <div
-              key={service.id}
+              key={service._id}
               className="col-12 col-sm-6 col-md-4 col-lg"
               style={{ minWidth: "220px" }}
             >
@@ -83,7 +75,7 @@ const Services = () => {
                       border: "3px solid #ffffff",
                     }}
                   >
-                    <IconComponent size={20} />
+                    <ServiceIcon name={service.icon} />
                   </div>
 
                   <h6
@@ -102,8 +94,7 @@ const Services = () => {
                 </div>
               </div>
             </div>
-          );
-        })}
+          ))}
       </div>
     </section>
   );

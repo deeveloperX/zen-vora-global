@@ -53,4 +53,7 @@ VITE_API_URL=http://localhost:5000
 
 Restart Vite after changing this value. In production, set it to the deployed backend origin in the frontend build environment and configure the backend's `FRONTEND_ORIGINS` environment variable with the exact frontend origin (comma-separated if multiple origins are needed).
 
+Public FAQs and services are loaded from `GET /api/faqs` and `GET /api/services`. Admin content management requires an administrator account. Create or reset one from `backend/` by setting `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the environment and running `npm run create-admin`; the backend must also have `MONGO_URI` configured.
+
+To insert the original five sample services into an empty database, run `npm run seed-services` from `backend/` with `MONGO_URI` configured. The command refuses to add records if the service collection is not empty. Services support a title, description, image URL, icon key, and display order.
 Public FAQs are loaded from `GET /api/faqs`. Admin FAQ management uses the protected `/api/faqs/admin` endpoint and requires an administrator account. Create or reset one from `backend/` by setting `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the environment and running `npm run create-admin`; the backend must also have `MONGO_URI` configured.

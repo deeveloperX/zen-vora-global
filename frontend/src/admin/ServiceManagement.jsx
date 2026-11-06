@@ -1,127 +1,183 @@
-import { useState } from "react";
-import { servicesData } from "../data/ServicesData";
-import { readAdminContent, writeAdminContent } from "../data/AdminContent";
+import { useCallback, useEffect, useState } from "react";
+import {
+  createService,
+  deleteService,
+  getServices,
+  updateService,
+} from "../api/services";
+import { serviceIconOptions } from "../data/ServiceIcons";
 
-const SERVICE_STORAGE_KEY = "zenvora-admin-services";
+const initialFormState = {
+  title: "",
+  description: "",
+  icon: "search",
+  image: "",
+  order: 0,
+};
 
 export default function ServiceManagement() {
-  const [services, setServices] = useState(() =>
-    readAdminContent(SERVICE_STORAGE_KEY, servicesData),
-  );
-
-  // Modal & Form State
+  const [services, setServices] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [currentServiceId, setCurrentServiceId] = useState(null);
-
-  const initialFormState = {
-    title: "",
-    description: "",
-    icon: "",
-    image: "",
-    price: "",
-    features: "",
-  };
-
   const [formData, setFormData] = useState(initialFormState);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const loadServices = useCallback(async () => {
+    setLoading(true);
+    setError("");
 
-  // Open modal for Create
-  const handleOpenCreate = () => {
-    setIsEditing(false);
-    setFormData(initialFormState);
+    try {
+      setServices(await getServices());
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Could not load services.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchServices = async () => {
+      try {
+        const items = await getServices();
+        if (active) setServices(items);
+      } catch (requestError) {
+        if (active) {
+          setError(
+            requestError instanceof Error
+              ? requestError.message
+              : "Could not load services.",
+          );
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    fetchServices();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const openCreate = () => {
+    setCurrentServiceId(null);
+    setFormData({ ...initialFormState, order: services.length });
+    setError("");
     setShowModal(true);
   };
 
-  // Open modal for Edit
-  const handleOpenEdit = (service) => {
-    setIsEditing(true);
-    setCurrentServiceId(service._id ?? service.id);
+  const openEdit = (service) => {
+    setCurrentServiceId(service._id);
     setFormData({
       title: service.title || "",
       description: service.description || "",
-      icon: typeof service.icon === "string" ? service.icon : "",
+      icon: service.icon || "search",
       image: service.image || "",
-      price: service.price || "",
-      // If features is stored as an array in backend, join with commas for the input field
-      features: Array.isArray(service.features)
-        ? service.features.join(", ")
-        : service.features || "",
+      order: service.order ?? 0,
     });
+    setError("");
     setShowModal(true);
   };
 
-  // Submit form (Create or Update)
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setSubmitting(true);
+    setError("");
+    setNotice("");
 
-    // Process features into an array if user entered comma-separated values
-    const payload = {
-      ...formData,
-      features: formData.features
-        ? formData.features
-            .split(",")
-            .map((f) => f.trim())
-            .filter(Boolean)
-        : [],
-    };
+    try {
+      if (currentServiceId === null) {
+        await createService(formData);
+        setNotice("Service created.");
+      } else {
+        await updateService(currentServiceId, formData);
+        setNotice("Service updated.");
+      }
 
-    const nextServices = isEditing
-      ? services.map((service) =>
-          (service._id ?? service.id) === currentServiceId
-            ? { ...service, ...payload }
-            : service,
-        )
-      : [...services, { ...payload, id: `demo-${Date.now()}` }];
-    setServices(nextServices);
-    writeAdminContent(SERVICE_STORAGE_KEY, nextServices);
-    setShowModal(false);
-    setSubmitting(false);
+      setShowModal(false);
+      await loadServices();
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Could not save this service.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Delete service
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this service?"))
+    if (!window.confirm("Are you sure you want to delete this service?")) {
       return;
-    const nextServices = services.filter(
-      (service) => (service._id ?? service.id) !== id,
-    );
-    setServices(nextServices);
-    writeAdminContent(SERVICE_STORAGE_KEY, nextServices);
+    }
+
+    setDeletingId(id);
+    setError("");
+    setNotice("");
+
+    try {
+      await deleteService(id);
+      setNotice("Service deleted.");
+      await loadServices();
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Could not delete this service.",
+      );
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
     <div className="container-fluid p-0">
-      {/* Header section with Create Button */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <h2 className="fw-bold text-dark mb-1">Services Management</h2>
+          <h1 className="h3 fw-bold text-dark mb-1">Services Management</h1>
           <p className="text-muted small mb-0">
             Add, configure, and manage your offered business services.
           </p>
         </div>
         <button
-          onClick={handleOpenCreate}
+          type="button"
+          onClick={openCreate}
           className="btn btn-dark fw-semibold px-3"
         >
-          <i className="bi bi-plus-lg me-2"></i> Add New Service
+          <i className="bi bi-plus-lg me-2" aria-hidden="true"></i>
+          Add New Service
         </button>
       </div>
 
-      {/* Error Alert */}
-      <div className="alert alert-info py-2 small">
-        Sample services from the data folder. Changes are saved in this browser.
-      </div>
+      {error && (
+        <div className="alert alert-danger py-2" role="alert">
+          {error}
+        </div>
+      )}
+      {notice && (
+        <div className="alert alert-success py-2" role="status">
+          {notice}
+        </div>
+      )}
 
-      {/* Main Table Card */}
       <div className="card border-0 shadow-sm rounded-3">
         <div className="card-body p-0">
-          {services.length === 0 ? (
+          {loading ? (
+            <p className="text-center text-muted py-5 mb-0" role="status">
+              Loading services...
+            </p>
+          ) : services.length === 0 ? (
             <div className="text-center py-5">
               <p className="text-muted mb-0">
                 No services found. Add your first service offering!
@@ -130,17 +186,17 @@ export default function ServiceManagement() {
           ) : (
             <div className="table-responsive">
               <table className="table table-hover align-middle mb-0">
-                <thead className="table-light text-secondary small uppercase">
+                <thead className="table-light text-secondary small text-uppercase">
                   <tr>
                     <th className="py-3 ps-4">Service Title</th>
                     <th className="py-3">Description</th>
-                    <th className="py-3">Price</th>
+                    <th className="py-3">Order</th>
                     <th className="py-3 text-end pe-4">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {services.map((service) => (
-                    <tr key={service._id ?? service.id}>
+                    <tr key={service._id}>
                       <td className="ps-4 fw-semibold text-dark">
                         {service.title}
                       </td>
@@ -150,23 +206,22 @@ export default function ServiceManagement() {
                       >
                         {service.description}
                       </td>
-                      <td className="fw-semibold text-success">
-                        {service.price ? `$${service.price}` : "Custom"}
-                      </td>
-                      <td className="text-end pe-4">
+                      <td>{service.order}</td>
+                      <td className="text-end pe-4 text-nowrap">
                         <button
-                          onClick={() => handleOpenEdit(service)}
+                          type="button"
+                          onClick={() => openEdit(service)}
                           className="btn btn-sm btn-outline-secondary me-2 px-2 py-1"
                         >
                           Edit
                         </button>
                         <button
-                          onClick={() =>
-                            handleDelete(service._id ?? service.id)
-                          }
+                          type="button"
+                          onClick={() => handleDelete(service._id)}
                           className="btn btn-sm btn-outline-danger px-2 py-1"
+                          disabled={deletingId === service._id}
                         >
-                          Delete
+                          {deletingId === service._id ? "Deleting..." : "Delete"}
                         </button>
                       </td>
                     </tr>
@@ -178,104 +233,139 @@ export default function ServiceManagement() {
         </div>
       </div>
 
-      {/* Create / Edit Modal */}
       {showModal && (
         <div
           className="modal show d-block"
-          tabIndex="-1"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="service-modal-title"
           style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
         >
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content border-0 shadow rounded-3">
               <div className="modal-header border-bottom px-4 py-3">
-                <h5 className="modal-title fw-bold">
-                  {isEditing ? "Edit Service" : "Add New Service"}
-                </h5>
+                <h2 id="service-modal-title" className="modal-title h5 fw-bold">
+                  {currentServiceId === null ? "Add New Service" : "Edit Service"}
+                </h2>
                 <button
                   type="button"
                   className="btn-close"
                   onClick={() => setShowModal(false)}
+                  aria-label="Close"
+                  disabled={submitting}
                 ></button>
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="modal-body p-4">
+                  {error && (
+                    <div className="alert alert-danger py-2" role="alert">
+                      {error}
+                    </div>
+                  )}
                   <div className="row g-3">
                     <div className="col-12">
-                      <label className="form-label fw-semibold small text-secondary">
+                      <label
+                        htmlFor="service-title"
+                        className="form-label fw-semibold small text-secondary"
+                      >
                         Service Title
                       </label>
                       <input
+                        id="service-title"
                         type="text"
-                        name="title"
                         className="form-control"
                         value={formData.title}
-                        onChange={handleInputChange}
+                        maxLength={150}
+                        onChange={(event) =>
+                          setFormData({ ...formData, title: event.target.value })
+                        }
                         required
                       />
                     </div>
                     <div className="col-md-6">
-                      <label className="form-label fw-semibold small text-secondary">
-                        Price / Rate
+                      <label
+                        htmlFor="service-icon"
+                        className="form-label fw-semibold small text-secondary"
+                      >
+                        Icon
                       </label>
-                      <input
-                        type="text"
-                        name="price"
-                        className="form-control"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        placeholder="e.g., 299 or Custom"
-                      />
+                      <select
+                        id="service-icon"
+                        className="form-select"
+                        value={formData.icon}
+                        onChange={(event) =>
+                          setFormData({ ...formData, icon: event.target.value })
+                        }
+                      >
+                        {serviceIconOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="col-md-6">
-                      <label className="form-label fw-semibold small text-secondary">
-                        Icon Class / Name
+                      <label
+                        htmlFor="service-order"
+                        className="form-label fw-semibold small text-secondary"
+                      >
+                        Display Order
                       </label>
                       <input
-                        type="text"
-                        name="icon"
+                        id="service-order"
+                        type="number"
                         className="form-control"
-                        value={formData.icon}
-                        onChange={handleInputChange}
-                        placeholder="e.g., bi-laptop"
+                        min="0"
+                        step="1"
+                        value={formData.order}
+                        onChange={(event) =>
+                          setFormData({
+                            ...formData,
+                            order: Number(event.target.value),
+                          })
+                        }
                       />
                     </div>
                     <div className="col-12">
-                      <label className="form-label fw-semibold small text-secondary">
+                      <label
+                        htmlFor="service-image"
+                        className="form-label fw-semibold small text-secondary"
+                      >
                         Image URL
                       </label>
                       <input
+                        id="service-image"
                         type="url"
-                        name="image"
                         className="form-control"
                         value={formData.image}
-                        onChange={handleInputChange}
+                        maxLength={2048}
+                        onChange={(event) =>
+                          setFormData({ ...formData, image: event.target.value })
+                        }
+                        required
                       />
                     </div>
                     <div className="col-12">
-                      <label className="form-label fw-semibold small text-secondary">
+                      <label
+                        htmlFor="service-description"
+                        className="form-label fw-semibold small text-secondary"
+                      >
                         Description
                       </label>
                       <textarea
-                        name="description"
+                        id="service-description"
                         className="form-control"
                         rows="3"
                         value={formData.description}
-                        onChange={handleInputChange}
+                        maxLength={2000}
+                        onChange={(event) =>
+                          setFormData({
+                            ...formData,
+                            description: event.target.value,
+                          })
+                        }
                         required
                       ></textarea>
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label fw-semibold small text-secondary">
-                        Features (Comma-separated)
-                      </label>
-                      <input
-                        type="text"
-                        name="features"
-                        className="form-control"
-                        value={formData.features}
-                        onChange={handleInputChange}
-                        placeholder="e.g., 24/7 Support, Custom Integration, Fully Responsive"
-                      />
                     </div>
                   </div>
                 </div>
@@ -284,6 +374,7 @@ export default function ServiceManagement() {
                     type="button"
                     className="btn btn-outline-secondary px-4"
                     onClick={() => setShowModal(false)}
+                    disabled={submitting}
                   >
                     Cancel
                   </button>
@@ -294,9 +385,9 @@ export default function ServiceManagement() {
                   >
                     {submitting
                       ? "Saving..."
-                      : isEditing
-                        ? "Update Service"
-                        : "Save Service"}
+                      : currentServiceId === null
+                        ? "Save Service"
+                        : "Update Service"}
                   </button>
                 </div>
               </form>
