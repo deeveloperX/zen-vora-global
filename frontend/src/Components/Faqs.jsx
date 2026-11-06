@@ -1,41 +1,63 @@
-import { faqData } from '../data/FaqData'; // Adjust path if FaqData.js is in another folder
+import useFaqs from "../hooks/useFaqs";
 
 const Faqs = () => {
-  return (
-    <>
-      {/* FAQ Section */}
-      <div className="row justify-content-center pt-4 container m-auto">
-        <div className="text-center mb-4">
-          <h3 className="fw-bold text-dark-blue">Frequently Asked Questions</h3>
-          <p className="text-muted small">Quick answers to common questions about our services</p>
-        </div>
+  const { faqs, loading, error } = useFaqs();
 
-        <div className="accordion accordion-flush shadow-sm rounded-4 overflow-hidden bg-white" id="contactFaq">
-          {faqData.map((faq, index) => {
+  return (
+    <div className="row justify-content-center pt-4 container m-auto">
+      <div className="text-center mb-4">
+        <h3 className="fw-bold text-dark-blue">Frequently Asked Questions</h3>
+        <p className="text-muted small">
+          Quick answers to common questions about our services
+        </p>
+      </div>
+
+      {loading && (
+        <p className="text-muted text-center" role="status">
+          Loading FAQs...
+        </p>
+      )}
+      {error && (
+        <p className="text-danger text-center" role="alert">
+          {error}
+        </p>
+      )}
+      {!loading && !error && faqs.length === 0 && (
+        <p className="text-muted text-center">No FAQs are available yet.</p>
+      )}
+
+      {!loading && !error && faqs.length > 0 && (
+        <div
+          className="accordion accordion-flush shadow-sm rounded-4 overflow-hidden bg-white"
+          id="contactFaq"
+        >
+          {faqs.map((faq, index) => {
+            const questionId = `contact-faq-question-${faq._id}`;
+            const answerId = `contact-faq-answer-${faq._id}`;
             const isFirst = index === 0;
-            const isLast = index === faqData.length - 1;
+            const isLast = index === faqs.length - 1;
 
             return (
-              <div 
-                key={faq.id} 
-                className={`accordion-item ${!isLast ? 'border-bottom' : ''}`}
+              <div
+                key={faq._id}
+                className={`accordion-item ${!isLast ? "border-bottom" : ""}`}
               >
-                <h2 className="accordion-header" id={`faq${faq.id}`}>
+                <h2 className="accordion-header" id={questionId}>
                   <button
-                    className={`accordion-button fw-semibold text-dark-blue shadow-none ${!isFirst ? 'collapsed' : ''}`}
+                    className={`accordion-button fw-semibold text-dark-blue shadow-none ${!isFirst ? "collapsed" : ""}`}
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target={`#collapse${faq.id}`}
-                    aria-expanded={isFirst ? "true" : "false"}
-                    aria-controls={`collapse${faq.id}`}
+                    data-bs-target={`#${answerId}`}
+                    aria-expanded={isFirst}
+                    aria-controls={answerId}
                   >
                     {faq.question}
                   </button>
                 </h2>
                 <div
-                  id={`collapse${faq.id}`}
-                  className={`accordion-collapse collapse ${isFirst ? 'show' : ''}`}
-                  aria-labelledby={`faq${faq.id}`}
+                  id={answerId}
+                  className={`accordion-collapse collapse ${isFirst ? "show" : ""}`}
+                  aria-labelledby={questionId}
                   data-bs-parent="#contactFaq"
                 >
                   <div className="accordion-body text-muted small lh-lg">
@@ -46,8 +68,8 @@ const Faqs = () => {
             );
           })}
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

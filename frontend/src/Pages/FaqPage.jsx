@@ -1,13 +1,7 @@
-import { useState } from "react";
-import { faqData as defaultFaqData } from "../data/FaqData";
-import { readAdminContent } from "../data/AdminContent";
-
-const FAQ_STORAGE_KEY = "zenvora-admin-faqs";
+import useFaqs from "../hooks/useFaqs";
 
 const FaqPage = () => {
-  const [faqData] = useState(() =>
-    readAdminContent(FAQ_STORAGE_KEY, defaultFaqData),
-  );
+  const { faqs, loading, error } = useFaqs();
 
   return (
     <div className="row justify-content-center pt-4 container m-auto">
@@ -18,45 +12,63 @@ const FaqPage = () => {
         </p>
       </div>
 
-      <div
-        className="accordion accordion-flush shadow-sm rounded-4 overflow-hidden bg-white"
-        id="contactFaq"
-      >
-        {faqData.map((faq, index) => {
-          const isFirst = index === 0;
-          const isLast = index === faqData.length - 1;
+      {loading && (
+        <p className="text-muted text-center" role="status">
+          Loading FAQs...
+        </p>
+      )}
+      {error && (
+        <p className="text-danger text-center" role="alert">
+          {error}
+        </p>
+      )}
+      {!loading && !error && faqs.length === 0 && (
+        <p className="text-muted text-center">No FAQs are available yet.</p>
+      )}
 
-          return (
-            <div
-              key={faq.id}
-              className={`accordion-item ${!isLast ? "border-bottom" : ""}`}
-            >
-              <h2 className="accordion-header" id={`faq${faq.id}`}>
-                <button
-                  className={`accordion-button fw-semibold text-dark-blue shadow-none ${!isFirst ? "collapsed" : ""}`}
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target={`#collapse${faq.id}`}
-                  aria-expanded={isFirst ? "true" : "false"}
-                  aria-controls={`collapse${faq.id}`}
-                >
-                  {faq.question}
-                </button>
-              </h2>
+      {!loading && !error && faqs.length > 0 && (
+        <div
+          className="accordion accordion-flush shadow-sm rounded-4 overflow-hidden bg-white"
+          id="faqPageAccordion"
+        >
+          {faqs.map((faq, index) => {
+            const questionId = `faq-question-${faq._id}`;
+            const answerId = `faq-answer-${faq._id}`;
+            const isFirst = index === 0;
+            const isLast = index === faqs.length - 1;
+
+            return (
               <div
-                id={`collapse${faq.id}`}
-                className={`accordion-collapse collapse ${isFirst ? "show" : ""}`}
-                aria-labelledby={`faq${faq.id}`}
-                data-bs-parent="#contactFaq"
+                key={faq._id}
+                className={`accordion-item ${!isLast ? "border-bottom" : ""}`}
               >
-                <div className="accordion-body text-muted small lh-lg">
-                  {faq.answer}
+                <h2 className="accordion-header" id={questionId}>
+                  <button
+                    className={`accordion-button fw-semibold text-dark-blue shadow-none ${!isFirst ? "collapsed" : ""}`}
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#${answerId}`}
+                    aria-expanded={isFirst}
+                    aria-controls={answerId}
+                  >
+                    {faq.question}
+                  </button>
+                </h2>
+                <div
+                  id={answerId}
+                  className={`accordion-collapse collapse ${isFirst ? "show" : ""}`}
+                  aria-labelledby={questionId}
+                  data-bs-parent="#faqPageAccordion"
+                >
+                  <div className="accordion-body text-muted small lh-lg">
+                    {faq.answer}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
