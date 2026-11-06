@@ -1,13 +1,57 @@
-import { useState } from "react";
-import { blogPosts } from "../data/BlogsData";
-import { readAdminContent, writeAdminContent } from "../data/AdminContent";
+import { useState, useEffect } from "react";
+import {
+  getAdminBlogs,
+  createBlogPost,
+  updateBlogPost,
+  deleteBlogPost,
+} from "../api/blogs";
 
-const BLOG_STORAGE_KEY = "zenvora-admin-blogs";
+// Helper function to automatically generate a URL-friendly slug from the title
+const slugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
+};
+
+const createUniqueSlug = (title, existingBlogs) => {
+  const baseSlug = slugify(title) || "blog-post";
+  const existingSlugs = new Set(existingBlogs.map((blog) => blog.slug));
+  let slug = baseSlug;
+  let suffix = 2;
+
+  while (existingSlugs.has(slug)) {
+    slug = `${baseSlug}-${suffix}`;
+    suffix += 1;
+  }
+
+  return slug;
+};
 
 export default function BlogManagement() {
-  const [blogs, setBlogs] = useState(() =>
-    readAdminContent(BLOG_STORAGE_KEY, blogPosts),
-  );
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // State for error handling
+
+  // Fetch blogs from MongoDB backend on component load
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const data = await getAdminBlogs();
+      setBlogs(data);
+    } catch (err) {
+      console.error("Failed to fetch blogs:", err);
+      setError("Failed to load blog posts. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Modal & Form State
   const [showModal, setShowModal] = useState(false);
@@ -22,14 +66,17 @@ export default function BlogManagement() {
     author: "",
     readTime: "",
     image: "",
+    published: true, // Default to published for new posts
   };
 
   const [formData, setFormData] = useState(initialFormState);
   const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    const {name, type, checked, value} = e.target;
+    const fieldValue = type === "checkbox" ? checked : value;
+    setFormData({ ...formData, [name]: fieldValue });
+  }
 
   // Open modal for Create
   const handleOpenCreate = () => {
@@ -41,7 +88,7 @@ export default function BlogManagement() {
   // Open modal for Edit
   const handleOpenEdit = (blog) => {
     setIsEditing(true);
-    setCurrentBlogId(blog._id ?? blog.id);
+    setCurrentBlogId(blog._id);
     setFormData({
       title: blog.title || "",
       category: blog.category || "",
@@ -49,42 +96,62 @@ export default function BlogManagement() {
       content: blog.content || "",
       author: blog.author || "",
       readTime: blog.readTime || "",
-      image: blog.image || "",
+      image: blog.coverImage || blog.image || "",
+      published: blog.published ?? true, // Map backend published status back to frontend
     });
     setShowModal(true);
   };
 
-  // Submit form (Create or Update)
-  const handleSubmit = (e) => {
+  // Submit form (Create or Update) to Backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    const nextBlogs = isEditing
-      ? blogs.map((blog) =>
-          (blog._id ?? blog.id) === currentBlogId
-            ? { ...blog, ...formData }
-            : blog,
-        )
-      : [
-          ...blogs,
-          {
-            ...formData,
-            id: `demo-${Date.now()}`,
-            date: new Date().toLocaleDateString(),
-          },
-        ];
-    setBlogs(nextBlogs);
-    writeAdminContent(BLOG_STORAGE_KEY, nextBlogs);
-    setShowModal(false);
-    setSubmitting(false);
+
+    // Construct the payload matching backend Mongoose schema requirements
+    const payload = {
+      title: formData.title,
+      // Generate slug only for new posts; keep existing slug for edits
+      ...(isEditing ? {} : { slug: createUniqueSlug(formData.title, blogs) }),
+      category: formData.category,
+      excerpt: formData.excerpt,
+      content: formData.content,
+      author: formData.author,
+      readTime: formData.readTime,
+      coverImage: formData.image, // Maps frontend 'image' to backend 'coverImage'
+      published: formData.published, // Passes true/false to MongoDB backend
+    };
+
+    try {
+      if (isEditing) {
+        await updateBlogPost(currentBlogId, payload);
+      } else {
+        await createBlogPost(payload);
+      }
+      setShowModal(false);
+      fetchBlogs(); // Refresh list from server
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to save blog post.";
+      alert(
+        !isEditing && /E11000|duplicate key/i.test(message)
+          ? "This blog URL is already in use. Please try again."
+          : message,
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Delete blog post
+  // Delete blog post from Backend
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog post?"))
       return;
-    const nextBlogs = blogs.filter((blog) => (blog._id ?? blog.id) !== id);
-    setBlogs(nextBlogs);
-    writeAdminContent(BLOG_STORAGE_KEY, nextBlogs);
+    try {
+      await deleteBlogPost(id);
+      fetchBlogs(); // Refresh list from server
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -105,15 +172,25 @@ export default function BlogManagement() {
         </button>
       </div>
 
-      {/* Error Alert */}
-      <div className="alert alert-info py-2 small">
-        Sample posts from the data folder. Changes are saved in this browser.
+      {/* Database Connection Alert */}
+      <div className="alert alert-success py-2 small">
+        Connected to MongoDB Database via Express Backend.
       </div>
-
+      {/* Visible Error Banner for Admin */}
+      {error && (
+        <div className="alert alert-danger text-center rounded-4 shadow-sm py-4 mb-4">
+          <h5 className="fw-bold mb-1">Admin Dashboard Error</h5>
+          <p className="mb-0">{error}</p>
+        </div>
+      )}
       {/* Main Table Card */}
       <div className="card border-0 shadow-sm rounded-3">
         <div className="card-body p-0">
-          {blogs.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-5">
+              <p className="text-muted mb-0">Loading blog posts...</p>
+            </div>
+          ) : blogs.length === 0 ? (
             <div className="text-center py-5">
               <p className="text-muted mb-0">
                 No blog posts found. Create your first one!
@@ -133,7 +210,7 @@ export default function BlogManagement() {
                 </thead>
                 <tbody>
                   {blogs.map((blog) => (
-                    <tr key={blog._id ?? blog.id}>
+                    <tr key={blog._id}>
                       <td
                         className="ps-4 fw-semibold text-dark"
                         style={{ maxWidth: "300px" }}
@@ -162,7 +239,7 @@ export default function BlogManagement() {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(blog._id ?? blog.id)}
+                          onClick={() => handleDelete(blog._id)}
                           className="btn btn-sm btn-outline-danger px-2 py-1"
                         >
                           Delete
@@ -237,6 +314,20 @@ export default function BlogManagement() {
                         onChange={handleInputChange}
                       />
                     </div>
+                    <div className="col-12">
+                      <div className="form-check form-switch">
+                        <input
+                          type="checkbox"
+                          name="published"
+                          className="form-check-input"
+                          checked={formData.published}
+                          onChange={handleInputChange}
+                        />
+                        <label className="form-check-label fw-semibold small text-secondary">
+                          Published
+                        </label>
+                      </div>
+                    </div>
                     <div className="col-md-6">
                       <label className="form-label fw-semibold small text-secondary">
                         Read Time (e.g., "5 min read")
@@ -304,8 +395,8 @@ export default function BlogManagement() {
                     {submitting
                       ? "Saving..."
                       : isEditing
-                        ? "Update Post"
-                        : "Publish Post"}
+                      ? "Update Post"
+                      : "Publish Post"}
                   </button>
                 </div>
               </form>
