@@ -1,25 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
-import { blogPosts } from "../data/BlogsData";
-import { readAdminContent } from "../data/AdminContent";
+import { API_BASE_URL } from "../api/apiBase";
 import { BsArrowRightShort } from "react-icons/bs";
-
-const BLOG_STORAGE_KEY = "zenvora-admin-blogs";
+import DOMPurify from "isomorphic-dompurify";
 
 const BlogDetails = () => {
-  const { id } = useParams();
-  const [posts] = useState(() => readAdminContent(BLOG_STORAGE_KEY, blogPosts));
+  const { slug } = useParams(); // Capture slug instead of id
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState("");
 
-  // Find article matching the route param
-  const post = posts.find((item) => String(item.id ?? item._id) === id);
+  useEffect(() => {
+    const fetchBlogPost = async () => {
+      setLoading(true);
+      setPost(null);
+      setNotFound(false);
+      setError("");
 
-  // Fallback if blog post is not found
-  if (!post) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/blogs/${slug}`);
+        if (response.status === 404) {
+          setNotFound(true);
+          return;
+        }
+        if (!response.ok) {
+          throw new Error("Failed to load this article.");
+        }
+        const data = await response.json();
+        setPost({
+          ...data,
+          image: data.coverImage || data.image, // Map backend field
+          date: new Date(data.createdAt).toLocaleDateString(), // Format date
+        });
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load this article right now. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (slug) {
+      fetchBlogPost();
+    }
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="container py-5 text-center min-vh-100 d-flex align-items-center justify-content-center">
+        <p className="text-muted">Loading article...</p>
+      </div>
+    );
+  }
+
+  if (error || notFound || !post) {
     return (
       <div className="container py-5 text-center min-vh-100 d-flex flex-column align-items-center justify-content-center">
-        <h2 className="fw-bold text-dark mb-3">Article Not Found</h2>
+        <h2 className="fw-bold text-dark mb-3">
+          {error ? "Unable to Load Article" : "Article Not Found"}
+        </h2>
         <p className="text-secondary mb-4">
-          The blog post you are looking for doesn't exist or has been removed.
+          {error ||
+            "The blog post you are looking for doesn't exist or has been removed."}
         </p>
         <Link to="/blogs" className="btn btn-primary rounded-pill px-4">
           &larr; Back to Blogs
@@ -86,7 +129,7 @@ const BlogDetails = () => {
             {/* Article Content */}
             <div
               className="lh-lg text-secondary fs-6"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
             />
 
             {/* Call To Action Box at Bottom of Article */}

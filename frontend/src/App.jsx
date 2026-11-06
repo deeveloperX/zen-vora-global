@@ -47,7 +47,7 @@ function Layout() {
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Contact />} />
         <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blogs/:id" element={<BlogDetails />} />
+        <Route path="/blogs/:slug" element={<BlogDetails />} />
         <Route path="/faqs" element={<FaqPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

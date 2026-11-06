@@ -8,7 +8,6 @@
     "dev": "nodemon server.js",
     "create-admin": "node scripts/create-admin.js",
     "seed-services": "node scripts/seed-services.js"
-    "create-admin": "node scripts/create-admin.js"
   },
   "keywords": [],
   "author": "",
