@@ -1,16 +1,40 @@
-import { useState } from "react";
-import { privacyData, termsData } from "../data/LegalData";
-import { readAdminContent, writeAdminContent } from "../data/AdminContent";
-
-const LEGAL_STORAGE_KEY = "zenvora-admin-legal";
-const defaultDocuments = { privacy: privacyData, terms: termsData };
+import { useState, useEffect } from "react";
+import { getLegalDocBySlug, updateLegalDoc } from "../api/legal";
 
 export default function LegalManagement() {
-  const [documents, setDocuments] = useState(() =>
-    readAdminContent(LEGAL_STORAGE_KEY, defaultDocuments),
-  );
+  const [documents, setDocuments] = useState({
+    privacy: null,
+    terms: null,
+  });
   const [activeDocument, setActiveDocument] = useState("privacy");
+  const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
+
+  // Fetch legal documents from backend on mount
+  useEffect(() => {
+    const fetchLegalDocs = async () => {
+      try {
+        setLoading(true);
+        const [privacyRes, termsRes] = await Promise.all([
+          getLegalDocBySlug("privacy"),
+          getLegalDocBySlug("terms"),
+        ]);
+        setDocuments({
+          privacy: privacyRes,
+          terms: termsRes,
+        });
+      } catch (err) {
+        console.error("Failed to fetch legal documents", err);
+        setError("Failed to load legal documents from database.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLegalDocs();
+  }, []);
+
   const document = documents[activeDocument];
 
   const updateDocument = (field, value) => {
@@ -39,7 +63,6 @@ export default function LegalManagement() {
     updateDocument("sections", [
       ...document.sections,
       {
-        id: `section-${Date.now()}`,
         title: "New section",
         content: "",
         list: [],
@@ -54,11 +77,59 @@ export default function LegalManagement() {
     );
   };
 
-  const saveChanges = (event) => {
+  const saveChanges = async (event) => {
     event.preventDefault();
-    writeAdminContent(LEGAL_STORAGE_KEY, documents);
-    setNotice("Legal document changes saved in this browser.");
+    setNotice("");
+    setError("");
+
+    try {
+      // Automatically update the 'lastUpdated' string to current date/time before saving
+      const currentDate = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+      const payload = {
+        ...document,
+        lastUpdated: currentDate,
+      };
+
+      const updated = await updateLegalDoc(document._id, payload);
+
+      setDocuments({
+        ...documents,
+        [activeDocument]: updated,
+      });
+
+      setNotice("Legal document successfully updated in MongoDB!");
+      setTimeout(() => setNotice(""), 4000);
+    } catch (err) {
+      console.error("Failed to save changes", err);
+      setError("Failed to save changes to the database.");
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="container-fluid p-4 text-center">
+        <div className="spinner-border text-dark" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="text-muted mt-2 small">Loading legal documents...</p>
+      </div>
+    );
+  }
+
+  if (!document) {
+    return (
+      <div className="container-fluid p-4">
+        <div className="alert alert-danger">
+          Could not load document data. Make sure your database is seeded with legal documents.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid p-0">
@@ -68,7 +139,7 @@ export default function LegalManagement() {
         </p>
         <h1 className="h3 fw-bold text-dark mb-1">Legal documents</h1>
         <p className="text-muted small mb-0">
-          Edit the privacy policy and terms shown on the public website.
+          Edit the privacy policy and terms stored in MongoDB.
         </p>
       </div>
 
@@ -81,20 +152,26 @@ export default function LegalManagement() {
           <button
             type="button"
             className={`nav-link ${activeDocument === "privacy" ? "active fw-semibold" : ""}`}
-            onClick={() => setActiveDocument("privacy")}
+            onClick={() => {
+              setActiveDocument("privacy");
+              setNotice("");
+            }}
           >
             Privacy policy
           </button>
           <button
             type="button"
             className={`nav-link ${activeDocument === "terms" ? "active fw-semibold" : ""}`}
-            onClick={() => setActiveDocument("terms")}
+            onClick={() => {
+              setActiveDocument("terms");
+              setNotice("");
+            }}
           >
             Terms &amp; conditions
           </button>
         </div>
         <span className="badge bg-light text-secondary border mb-2">
-          {document.sections.length} sections
+          {document.sections?.length || 0} sections
         </span>
       </div>
 
@@ -103,6 +180,13 @@ export default function LegalManagement() {
           {notice}
         </div>
       )}
+
+      {error && (
+        <div className="alert alert-danger py-2" role="alert">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={saveChanges}>
         <div className="card border-0 shadow-sm rounded-3 mb-4">
           <div className="card-body p-4">
@@ -130,16 +214,13 @@ export default function LegalManagement() {
                   htmlFor="legal-updated"
                   className="form-label small fw-semibold"
                 >
-                  Last updated
+                  Last updated (Auto-synced on save)
                 </label>
                 <input
                   id="legal-updated"
-                  className="form-control"
+                  className="form-control bg-light"
                   value={document.lastUpdated}
-                  onChange={(event) =>
-                    updateDocument("lastUpdated", event.target.value)
-                  }
-                  required
+                  disabled
                 />
               </div>
               <div className="col-12">
@@ -178,7 +259,7 @@ export default function LegalManagement() {
           {document.sections.map((section, index) => (
             <section
               className="card border-0 shadow-sm rounded-3"
-              key={section.id}
+              key={section._id || index}
             >
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-start gap-3 mb-3">
