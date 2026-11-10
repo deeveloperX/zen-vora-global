@@ -17,8 +17,8 @@ export default function LegalManagement() {
       try {
         setLoading(true);
         const [privacyRes, termsRes] = await Promise.all([
-          getLegalDocBySlug("privacy"),
-          getLegalDocBySlug("terms"),
+          getLegalDocBySlug("privacy-policy"),
+          getLegalDocBySlug("terms-conditions"),
         ]);
         setDocuments({
           privacy: privacyRes,
