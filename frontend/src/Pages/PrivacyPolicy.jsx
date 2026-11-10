@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
     const fetchPrivacy = async () => {
       try {
         setLoading(true);
-        const data = await getLegalDocBySlug("privacy");
+        const data = await getLegalDocBySlug("privacy-policy");
         setPrivacyData(data);
       } catch (err) {
         console.error("Failed to fetch privacy policy", err);

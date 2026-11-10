@@ -10,7 +10,7 @@ const TermsConditions = () => {
     const fetchTerms = async () => {
       try {
         setLoading(true);
-        const data = await getLegalDocBySlug("terms");
+        const data = await getLegalDocBySlug("terms-conditions");
         setTermsData(data);
       } catch (err) {
         console.error("Failed to fetch terms & conditions", err);

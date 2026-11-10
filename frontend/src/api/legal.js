@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
   };
 };
 
-// Get a single legal document by slug (e.g., 'privacy' or 'terms')
+// Get a single legal document by slug (e.g., 'privacy-policy' or 'terms-conditions')
 export const getLegalDocBySlug = async (slug) => {
   const response = await fetch(`${LEGAL_URL}/${slug}`);
   if (!response.ok) {
