@@ -127,7 +127,8 @@ export default function AdminLayout() {
       <AdminSidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
 
       {/* Main Content Area */}
-      <div className="flex-grow-1 d-flex flex-column">
+      <div className="flex-grow-1 d-flex flex-column"
+        style={{ marginLeft: isSidebarCollapsed ? "80px" : "280px" }}>
         <main className="p-4 flex-grow-1">
           <Outlet />
         </main>
