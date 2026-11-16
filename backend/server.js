@@ -9,6 +9,7 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const legalRoutes = require('./routes/legalRoutes');
 const faqRoutes = require('./routes/faqRoutes');
 const blogRoutes = require('./routes/blogRoutes');
+const highlightRoutes = require('./routes/highlightRoutes');
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/blogs', blogRoutes);
-
+app.use('/api/highlights', highlightRoutes);
 // Base Test Route
 app.get('/', (req, res) => {
   res.send('ZenVora Backend API is running...');
