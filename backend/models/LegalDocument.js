@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+const sectionSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, 'Section title is required'],
+    trim: true
+  },
+  content: {
+    type: String,
+    required: [true, 'Section content is required']
+  },
+  list: {
+    type: [String],
+    default: []
+  }
+});
+
 const legalDocumentSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -13,13 +29,17 @@ const legalDocumentSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
-  content: {
-    type: String,
-    required: [true, 'Document content is required']
-  },
   lastUpdated: {
-    type: Date,
-    default: Date.now
-  }
+    type: String,
+    required: [true, 'Last updated date is required'],
+    default: "October 2026",
+    trim: true
+  },
+  introduction: {
+    type: String,
+    required: [true, 'Introduction is required']
+  },
+  sections: [sectionSchema]
 }, { timestamps: true });
-module.exports = mongoose.model('LegalDosument', legalDocumentSchema);
+
+module.exports = mongoose.model('LegalDocument', legalDocumentSchema);
