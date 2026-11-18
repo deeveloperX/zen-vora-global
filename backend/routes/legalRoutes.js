@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 2. PUBLIC: Get a single legal document by slug (e.g., /api/legal/privacy-policy)
+// 2. PUBLIC: Get a single legal document by slug (e.g., /api/legal/privacy-policy or /api/legal/terms-conditions)
 router.get('/:slug', async (req, res) => {
   try {
     const document = await LegalDocument.findOne({ slug: req.params.slug });
@@ -41,9 +41,13 @@ router.post('/', verifyAdmin, async (req, res) => {
 // 4. ADMIN: Update an existing legal document
 router.patch('/:id', verifyAdmin, async (req, res) => {
   try {
+    const formattedDate = new Date().toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric'
+    });
     const updatedDoc = await LegalDocument.findByIdAndUpdate(
       req.params.id,
-      { ...req.body, lastUpdated: Date.now() }, // Automatically update lastUpdated timestamp
+      { ...req.body, lastUpdated: formattedDate }, // Automatically update lastUpdated timestamp
       { returnDocument: 'after', runValidators: true }
     );
     

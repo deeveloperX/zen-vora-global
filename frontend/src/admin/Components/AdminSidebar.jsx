@@ -20,10 +20,15 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
   };
   return (
     <div
-      className="d-flex flex-column flex-shrink-0 p-3 bg-transparent border-end position-relative"
+      className="d-flex flex-column flex-shrink-0 p-3 bg-light border-end "
       style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
         width: isCollapsed ? "80px" : "280px",
-        minHeight: "100vh",
+        height: "100vh",
+        zIndex: 1030,
+        overflow: "hidden",
         transition: "width 0.3s ease",
       }}
     >
