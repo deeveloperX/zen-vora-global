@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Service = require('../models/Service');
 const { verifyAdmin } = require('../middleware/auth');
+const { isCustomIconDataUri } = require('../utils/iconValidation');
 
 const router = express.Router();
 const editableFields = ['title', 'description', 'image', 'icon', 'order'];
@@ -39,8 +40,11 @@ const validateServiceBody = (body, { partial = false } = {}) => {
     }
   }
 
-  if (Object.hasOwn(body, 'icon') && (typeof body.icon !== 'string' || !iconNames.includes(body.icon))) {
-    return `Icon must be one of: ${iconNames.join(', ')}`;
+  if (
+    Object.hasOwn(body, 'icon') &&
+    (typeof body.icon !== 'string' || (!iconNames.includes(body.icon) && !isCustomIconDataUri(body.icon)))
+  ) {
+    return `Icon must be one of: ${iconNames.join(', ')}, or a PNG, JPEG, or WebP image up to 128 KB`;
   }
 
   if (Object.hasOwn(body, 'order') && (!Number.isInteger(body.order) || body.order < 0)) {

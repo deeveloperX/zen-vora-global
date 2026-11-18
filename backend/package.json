@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "create-admin": "node scripts/create-admin.js",
     "seed-services": "node scripts/seed-services.js",
-    "seed:highlights": "node scripts/highlightSeed.js"
+    "seed:highlights": "node scripts/highlightSeed.js",
     "seed-legal": "node scripts/seed-legal.js"
   },
   "keywords": [],

@@ -5,6 +5,8 @@ import {
   getServices,
   updateService,
 } from "../api/services";
+import ServiceIcon from "../Components/ServiceIcon";
+import IconUploadField from "./Components/IconUploadField";
 import { serviceIconOptions } from "../data/ServiceIcons";
 
 const initialFormState = {
@@ -88,6 +90,8 @@ export default function ServiceManagement() {
     setError("");
     setShowModal(true);
   };
+
+  const isCustomIcon = formData.icon.startsWith("data:image/");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -189,6 +193,7 @@ export default function ServiceManagement() {
                 <thead className="table-light text-secondary small text-uppercase">
                   <tr>
                     <th className="py-3 ps-4">Service Title</th>
+                    <th className="py-3">Icon</th>
                     <th className="py-3">Description</th>
                     <th className="py-3">Order</th>
                     <th className="py-3 text-end pe-4">Actions</th>
@@ -199,6 +204,9 @@ export default function ServiceManagement() {
                     <tr key={service._id}>
                       <td className="ps-4 fw-semibold text-dark">
                         {service.title}
+                      </td>
+                      <td>
+                        <ServiceIcon name={service.icon} size={22} />
                       </td>
                       <td
                         className="text-muted small text-truncate"
@@ -292,17 +300,29 @@ export default function ServiceManagement() {
                       <select
                         id="service-icon"
                         className="form-select"
-                        value={formData.icon}
-                        onChange={(event) =>
-                          setFormData({ ...formData, icon: event.target.value })
-                        }
+                        value={isCustomIcon ? "custom" : formData.icon}
+                        onChange={(event) => {
+                          if (event.target.value !== "custom") {
+                            setFormData({ ...formData, icon: event.target.value });
+                          }
+                        }}
                       >
+                        {isCustomIcon && <option value="custom">Uploaded custom icon</option>}
                         {serviceIconOptions.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
                           </option>
                         ))}
                       </select>
+                      <IconUploadField
+                        id="service-custom-icon"
+                        value={formData.icon}
+                        onChange={(icon) => {
+                          setError("");
+                          setFormData((current) => ({ ...current, icon }));
+                        }}
+                        onError={setError}
+                      />
                     </div>
                     <div className="col-md-6">
                       <label

@@ -2,10 +2,12 @@
 import { useRef } from 'react';
 import { Link, NavLink } from 'react-router';
 import Logo from '../assets/android-chrome-192x192.png';
+import useServices from '../hooks/useServices';
 
 const Navbar = () => {
     const collapseRef = useRef(null);
     const togglerRef = useRef(null);
+    const { services, loading: servicesLoading, error: servicesError } = useServices();
 
     const handleNavigationClick = (event) => {
         const target = event.target;
@@ -47,11 +49,19 @@ const Navbar = () => {
                                     Our Services
                                 </Link>
                                 <ul className="dropdown-menu nav-custom-dropdown">
-                                    <li><Link to={`/services`} className="dropdown-item">Product Sourcing</Link></li>
-                                    <li><Link to={`/services`} className="dropdown-item">Dropshipping Services</Link></li>
-                                    <li><Link to={`/services`} className="dropdown-item">E-commerce Support</Link></li>
-                                    <li><Link to={`/services`} className="dropdown-item">International Shipping</Link></li>
-                                    <li><Link to={`/services`} className="dropdown-item">Business Growth</Link></li>
+                                    {servicesLoading ? (
+                                        <li><span className="dropdown-item-text text-muted">Loading services...</span></li>
+                                    ) : servicesError ? (
+                                        <li><span className="dropdown-item-text text-danger">{servicesError}</span></li>
+                                    ) : services.length === 0 ? (
+                                        <li><span className="dropdown-item-text text-muted">No services available.</span></li>
+                                    ) : (
+                                        services.map((service) => (
+                                            <li key={service._id}>
+                                                <Link to="/services" className="dropdown-item">{service.title}</Link>
+                                            </li>
+                                        ))
+                                    )}
                                 </ul>
                             </li>
                             {/* <li className="nav-item dropdown">

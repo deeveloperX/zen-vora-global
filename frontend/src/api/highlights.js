@@ -33,9 +33,23 @@ export function getHighlights() {
   return requestHighlights();
 }
 
+export function createHighlight(highlight) {
+  return requestHighlights(
+    "",
+    adminOptions({ method: "POST", body: JSON.stringify(highlight) }),
+  );
+}
+
 export function updateHighlight(id, highlight) {
   return requestHighlights(
     `/${encodeURIComponent(id)}`,
     adminOptions({ method: "PATCH", body: JSON.stringify(highlight) }),
+  );
+}
+
+export function deleteHighlight(id) {
+  return requestHighlights(
+    `/${encodeURIComponent(id)}`,
+    adminOptions({ method: "DELETE" }),
   );
 }

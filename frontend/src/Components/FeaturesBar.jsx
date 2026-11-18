@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
-import { FiGlobe, FiShield, FiTruck, FiTrendingUp } from "react-icons/fi";
-import { BsHeadset } from "react-icons/bs";
 import { getHighlights } from "../api/highlights";
-
-// Icon mapping dictionary
-const iconMap = {
-  FiGlobe: FiGlobe,
-  FiShield: FiShield,
-  FiTruck: FiTruck,
-  BsHeadset: BsHeadset,
-  FiTrendingUp: FiTrendingUp,
-};
+import HighlightIcon from "./HighlightIcon";
 
 // Fallback static data in case backend fetch fails or is unreachable
 const fallbackHighlights = [
@@ -23,34 +13,27 @@ const fallbackHighlights = [
 
 const FeaturesBar = () => {
   const [features, setFeatures] = useState(fallbackHighlights);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getHighlights()
       .then((data) => {
-        if (data && Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setFeatures(data);
         }
       })
       .catch((err) => {
         console.warn("Backend highlights unreachable. Falling back to default data.", err);
         // Keeps fallbackHighlights active automatically
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, []);
 
-  // Never return null or render blank; always show either fresh or fallback data
-  if (loading && features.length === 0) return null;
+  if (features.length === 0) return null;
 
   return (
     <section className="bg-white border-bottom rounded-4 mx-auto shadow-sm py-4 px-3 feature-custom-position">
       <div className="container">
         <div className="row g-3 justify-content-center align-items-stretch">
           {features.map((item) => {
-            const IconComponent = iconMap[item.icon] || FiGlobe;
-
             return (
               <div
                 key={item.id || item._id}
@@ -62,7 +45,7 @@ const FeaturesBar = () => {
                     className="mb-2 p-2 rounded-circle bg-white text-mySecondary d-inline-flex align-items-center justify-content-center shadow-sm feature-icon-box"
                     style={{ width: "46px", height: "46px" }}
                   >
-                    <IconComponent size={22} />
+                    <HighlightIcon name={item.icon} />
                   </div>
                   <h6
                     className="fw-bold text-myPrimary mb-1"

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const { isCustomIconDataUri } = require('../utils/iconValidation');
+
+const SERVICE_ICON_NAMES = ['search', 'shopping-cart', 'bar-chart', 'paper-airplane', 'headset'];
 
 const serviceSchema = new mongoose.Schema({
   title: {
@@ -23,8 +26,11 @@ const serviceSchema = new mongoose.Schema({
   },
   icon: {
     type: String,
-    enum: ['search', 'shopping-cart', 'bar-chart', 'paper-airplane', 'headset'],
-    default: 'search'
+    default: 'search',
+    validate: {
+      validator: (value) => SERVICE_ICON_NAMES.includes(value) || isCustomIconDataUri(value),
+      message: 'Icon must be a supported service icon or a PNG, JPEG, or WebP image up to 128 KB'
+    }
   },
   order: {
     type: Number,

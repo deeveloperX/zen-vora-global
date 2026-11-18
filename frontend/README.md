@@ -45,13 +45,13 @@ Vite prints the local development URL in the terminal when the server starts.
 
 The Vercel configuration rewrites incoming paths to `index.html`, allowing the client-side router to serve direct visits to application routes. Build the site with `npm run build`; the generated static files are in `dist/`.
 
-The frontend API uses `VITE_API_URL` as the backend origin. It defaults to `http://localhost:5000` during local development; production builds require `VITE_API_URL` to be set in the deployment environment. In Vercel, configure it separately for Preview and Production deployments. Create `frontend/.env.local` with:
+The frontend API uses `VITE_API_URL` as the backend origin. It defaults to `http://localhost:5000` during local development; production builds require `VITE_API_URL` to be set in the deployment environment. This value is embedded at build time, so redeploy the frontend after changing it. In Vercel, configure it separately for Preview and Production deployments. Set it to the backend origin only (for example, `https://api.example.com`, without `/api`) and create `frontend/.env.local` for local development with:
 
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-Restart Vite after changing this value. In production, set it to the deployed backend origin in the frontend build environment and configure the backend's `FRONTEND_ORIGINS` environment variable with the exact frontend origin (comma-separated if multiple origins are needed).
+Restart Vite after changing this value. In production, set it to the deployed backend origin in the frontend build environment and configure the backend's `FRONTEND_ORIGINS` environment variable with the exact frontend origin (comma-separated if multiple origins are needed). The public highlights endpoint is `GET /api/highlights`; admins can add, edit (including the icon), and delete highlights from the dashboard. Services and highlights accept preset icons or custom PNG, JPEG, and WebP uploads (up to 128 KB); uploaded icons are stored with their MongoDB records. If the admin reports a request error, check the deployed endpoint directly and verify the backend's `MONGO_URI`, `FRONTEND_ORIGINS`, and frontend `VITE_API_URL`. An empty-state warning is only shown after the endpoint successfully returns an empty array.
 
 Public FAQs and services are loaded from `GET /api/faqs` and `GET /api/services`. Admin content management requires an administrator account. Create or reset one from `backend/` by setting `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the environment and running `npm run create-admin`; the backend must also have `MONGO_URI` configured.
 

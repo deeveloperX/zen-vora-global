@@ -63,7 +63,7 @@ export default function AdminSidebar({ isCollapsed, toggleSidebar }) {
       </div>
 
       {/* Navigation Links */}
-      <ul className="nav nav-pills flex-column mb-auto gap-1">
+      <ul className="nav nav-pills flex-column mb-auto gap-2">
         <li className="nav-item">
           <NavLink
             to="/dashboard"
